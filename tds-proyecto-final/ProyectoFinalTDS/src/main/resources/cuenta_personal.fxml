@@ -140,17 +140,14 @@
                             <children>
                                 <Label styleClass="card-header" text="Listado de Movimientos" />
 
-                                <TableView styleClass="custom-table" VBox.vgrow="ALWAYS">
-                                    <columns>
-                                        <TableColumn prefWidth="90.0" text="Fecha" />
-                                        <TableColumn prefWidth="120.0" text="Categoría" />
-                                        <TableColumn prefWidth="200.0" text="Concepto" />
-                                        <TableColumn prefWidth="90.0" text="Importe" />
-                                    </columns>
-                                    <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                    </columnResizePolicy>
-                                </TableView>
+                                <TableView fx:id="tablaGastos" styleClass="custom-table" VBox.vgrow="ALWAYS">
+							    	<columns>
+								        <TableColumn fx:id="colFecha" prefWidth="90.0" text="Fecha" />
+								        <TableColumn fx:id="colCategoria" prefWidth="120.0" text="Categoría" />
+								        <TableColumn fx:id="colDescripcion" prefWidth="200.0" text="Concepto" />
+								        <TableColumn fx:id="colImporte" prefWidth="90.0" text="Importe" />
+							    	</columns>
+							    </TableView>
                             </children>
                         </VBox>
                     </children>

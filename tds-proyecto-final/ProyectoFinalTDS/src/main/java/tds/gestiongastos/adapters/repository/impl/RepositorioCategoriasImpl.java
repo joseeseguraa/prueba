@@ -15,7 +15,6 @@ import tds.gestiongastos.modelo.impl.CategoriaImpl;
 public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
 	private List<CategoriaImpl> categorias = new ArrayList<CategoriaImpl>();
-
 	private final String RUTA_FICHERO = "src/main/resources/categorias.json";
 
 	public RepositorioCategoriasImpl() {
@@ -48,7 +47,6 @@ public class RepositorioCategoriasImpl implements RepositorioCategorias {
 		return categorias.stream().filter(c -> c.getNombre().equalsIgnoreCase(nombre)).findFirst().orElse(null);
 	}
 
-	// --- MÉTODOS PRIVADOS DE PERSISTENCIA (Jackson) ---
 
 	private void cargarDatos() {
 		try {
