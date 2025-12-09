@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" spacing="15.0" styleClass="form-container" stylesheets="@crearCompartida.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.CrearNuevaCompartidaVistaControlador">
+   <children>
+
+      <Label styleClass="form-title" text="Nueva Cuenta Compartida">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Label>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Nombre de la Cuenta *" />
+            <TextField fx:id="txtNombreCuenta" promptText="Ej: Viaje a París, Piso Estudiantes..." styleClass="form-field" />
+         </children>
+      </VBox>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Número de Personas *" />
+            <HBox spacing="10.0">
+               <children>
+                  <TextField fx:id="txtNumPersonas" prefWidth="80.0" promptText="Ej: 4" styleClass="form-field" />
+                  <Button mnemonicParsing="false" onAction="#generarCamposPersonas" styleClass="btn-icon-secondary" text="Generar Espacios" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+
+      <Label styleClass="form-label" text="Nombres de los integrantes:" />
+
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" style="-fx-background-color: transparent; -fx-background: transparent;">
+         <content>
+            <VBox fx:id="containerIntegrantes" spacing="10.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <children>
+                  <TextField promptText="Nombre Persona 1" styleClass="form-field" />
+                  <TextField promptText="Nombre Persona 2" styleClass="form-field" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+
+      <Region VBox.vgrow="ALWAYS" />
+
+      <HBox alignment="CENTER" spacing="15.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#cancelarCuenta" styleClass="btn-cancel" text="Cancelar" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#guardarCuenta" styleClass="btn-save" text="Crear Cuenta" />
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </HBox>
+
+   </children>
+
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+</VBox>

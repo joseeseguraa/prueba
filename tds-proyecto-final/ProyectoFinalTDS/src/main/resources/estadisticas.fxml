@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1300.0" stylesheets="@cuenta_personal.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.um.tds.gestiongastos.vista.EstadisticasVistaControlador">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" styleClass="top-bar" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#botonVolver" styleClass="btn-icon" text="⬅">
+                    <HBox.margin><Insets right="10.0" /></HBox.margin>
+                </Button>
+                <Label styleClass="header-title" text="Análisis y Gráficos">
+                    <font><Font name="System Bold" size="24.0" /></font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+            <padding><Insets left="20.0" right="20.0" /></padding>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox prefHeight="635.0" prefWidth="220.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+            <children>
+                <Label styleClass="sidebar-header" text="MENÚ PRINCIPAL" />
+                
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonVolverCuentaPersonal" styleClass="sidebar-btn" text="Dashboard" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonAlertas" styleClass="sidebar-btn" text="Mis Límites y Alertas" />
+                
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-btn-active" text="Gráficos" />
+                
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCalendario" styleClass="sidebar-btn" text="Calendario" />
+
+                <Separator opacity="0.3" prefWidth="200.0">
+                    <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
+                </Separator>
+
+                <Label styleClass="sidebar-header" text="CONFIGURACIÓN" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonAlertas" styleClass="sidebar-btn" text="Crear Alertas" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCategorias" styleClass="sidebar-btn" text="Crear Categorías" />
+            </children>
+            <padding><Insets top="20.0" /></padding>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="20.0" styleClass="content-area-scroll" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+            <children>
+
+                <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="filter-container">
+                    <children>
+                        <Label styleClass="section-title" text="Estadísticas de Gasto" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        
+                        <Label styleClass="filter-label" text="Periodo:" />
+                        <DatePicker fx:id="dateInicio" prefWidth="120.0" promptText="Desde" />
+                        <DatePicker fx:id="dateFin" prefWidth="120.0" promptText="Hasta" />
+                        
+                        <Button mnemonicParsing="false" onAction="#actualizarGraficos" styleClass="btn-filter-action" text="Actualizar" />
+                    </children>
+                    <padding><Insets bottom="15.0" left="15.0" right="15.0" top="15.0" /></padding>
+                </HBox>
+
+                <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox styleClass="chart-container" HBox.hgrow="SOMETIMES" prefWidth="400.0">
+                            <children>
+                                <Label styleClass="card-header" text="Por Categoría" />
+                                <PieChart fx:id="pieChartCategorias" labelsVisible="true" legendSide="BOTTOM" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+
+                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="card-header" text="Evolución Temporal" />
+                                <BarChart fx:id="barChartEvolucion" legendVisible="false" VBox.vgrow="ALWAYS">
+                                    <xAxis>
+                                        <CategoryAxis label="Fecha" side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Euros" side="LEFT" />
+                                    </yAxis>
+                                </BarChart>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

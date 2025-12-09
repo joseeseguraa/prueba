@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1300.0" stylesheets="@cuenta_personal.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.um.tds.gestiongastos.vista.CalendarioControlador">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" styleClass="top-bar" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#botonVolver" styleClass="btn-icon" text="⬅">
+                    <HBox.margin><Insets right="10.0" /></HBox.margin>
+                </Button>
+                <Label styleClass="header-title" text="Calendario de Gastos">
+                    <font><Font name="System Bold" size="24.0" /></font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+            <padding><Insets left="20.0" right="20.0" /></padding>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox prefHeight="635.0" prefWidth="220.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+            <children>
+                <Label styleClass="sidebar-header" text="MENÚ PRINCIPAL" />
+                
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonVolverCuentaPersonal" styleClass="sidebar-btn" text="Dashboard" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonAlertas" styleClass="sidebar-btn" text="Mis Límites y Alertas" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonGrafico" styleClass="sidebar-btn" text="Gráficos" />
+                
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-btn-active" text="Calendario" />
+
+                <Separator opacity="0.3" prefWidth="200.0">
+                    <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
+                </Separator>
+
+                <Label styleClass="sidebar-header" text="CONFIGURACIÓN" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonAlertas" styleClass="sidebar-btn" text="Crear Alertas" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCategorias" styleClass="sidebar-btn" text="Crear Categorías" />
+            </children>
+            <padding><Insets top="20.0" /></padding>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contenedorCalendario" BorderPane.alignment="CENTER" />
+    </center>
+
+</BorderPane>

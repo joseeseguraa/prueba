@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="400.0" spacing="15.0" styleClass="form-container" stylesheets="@gasto.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.GestionGasto">
+   <children>
+
+      <Label styleClass="form-title" text="Registrar Nuevo Gasto">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </Label>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Importe (€) *" />
+            <TextField fx:id="txtGastoImporte" promptText="0.00" styleClass="form-field-money" />
+         </children>
+      </VBox>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Concepto / Descripción *" />
+            <TextField fx:id="txtGastoDescripcion" promptText="Ej: Compra semanal Mercadona" styleClass="form-field" />
+         </children>
+      </VBox>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Fecha del Gasto *" />
+            <DatePicker fx:id="dateGastoFecha" maxWidth="1.7976931348623157E308" promptText="Selecciona fecha" styleClass="form-field" />
+         </children>
+      </VBox>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Categoría *" />
+            <HBox spacing="10.0">
+               <children>
+                   <ComboBox fx:id="comboGastoCategoria" maxWidth="1.7976931348623157E308" promptText="Seleccionar..." styleClass="form-field" HBox.hgrow="ALWAYS" />
+
+                   <Button mnemonicParsing="false" onAction="#botonCategorias" styleClass="btn-icon-secondary" text="+">
+                     <tooltip>
+                        <Tooltip text="Crear nueva categoría" />
+                     </tooltip>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+
+      <VBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="ALWAYS" />
+
+      <HBox alignment="CENTER" spacing="15.0">
+         <children>
+              <Button mnemonicParsing="false" onAction="#cancelarRegistro" styleClass="btn-cancel" text="Cancelar" />
+            <Region HBox.hgrow="ALWAYS" />
+             <Button mnemonicParsing="false" onAction="#guardarGasto" styleClass="btn-save" text="Guardar Gasto" />
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </HBox>
+
+   </children>
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+</VBox>
