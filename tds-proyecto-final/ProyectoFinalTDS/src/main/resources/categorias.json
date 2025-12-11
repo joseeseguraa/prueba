@@ -1,0 +1,16 @@
+[ {
+  "nombre" : "Alimentación",
+  "descripcion" : "Comida y bebida"
+}, {
+  "nombre" : "Ocio",
+  "descripcion" : "Entretenimiento y suscripciones"
+}, {
+  "nombre" : "Transporte",
+  "descripcion" : "Gasolina y transporte público"
+}, {
+  "nombre" : "bjj",
+  "descripcion" : "Descripción por defecto"
+}, {
+  "nombre" : "vghv",
+  "descripcion" : "Descripción por defecto"
+} ]

@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -29,7 +28,7 @@ public class SceneManager {
     }
     
     public void showCrearCuentaCompartida() {
-    	cargarYMostar("crearCompartida");
+    	cargarYMostarDialogo("crearCompartida", "Nueva Cuenta Compartida");
     }
 
     
@@ -45,20 +44,27 @@ public class SceneManager {
     	cargarYMostarDialogo("nueva_alerta.fxml", "Crear Alerta");
     }
 
+    public void showCalendario() {
+    	cargarYMostarDialogo("calendario.fxml", "Abrir Calendario");
+    }
     
     
     private void cargarYMostarDialogo(String fxml, String titulo) {
         try {
-        	DialogPane pane = (DialogPane) loadFXML(fxml);
+            Parent root = loadFXML(fxml);
+            
             Dialog<Void> dialog = new Dialog<>();
-            dialog.setDialogPane(pane);
             dialog.setTitle(titulo);
             dialog.initStyle(StageStyle.UTILITY);
-
+            
+            dialog.getDialogPane().setContent(root);
+            
             dialog.showAndWait();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+            
+        } catch (IOException e) {
+            e.printStackTrace(); // Importante para ver errores de carga
+            throw new RuntimeException(e);
+        }
     }
 
 	private void cargarYMostar(String fxml) {

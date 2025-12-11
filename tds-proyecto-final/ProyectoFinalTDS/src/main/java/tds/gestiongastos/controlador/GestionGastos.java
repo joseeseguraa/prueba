@@ -1,22 +1,24 @@
 package tds.gestiongastos.controlador;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-// Imports de tus Interfaces del Modelo
+
 import tds.gestiongastos.modelo.Alerta;
 import tds.gestiongastos.modelo.Categoria;
 import tds.gestiongastos.modelo.TipoCuenta;
 import tds.gestiongastos.modelo.Gasto;
 import tds.gestiongastos.modelo.Notificacion;
 
-// Imports de las Implementaciones (necesarias para crear objetos con 'new')
+
 import tds.gestiongastos.modelo.impl.CuentaCompartidaImpl;
 import tds.gestiongastos.modelo.impl.GastoImpl;
 import tds.gestiongastos.modelo.impl.AlertaImpl;
+import tds.gestiongastos.modelo.impl.CategoriaImpl;
 
-// Imports de los Repositorios
 import tds.gestiongastos.adapters.repository.RepositorioCuentas;
 import tds.gestiongastos.adapters.repository.RepositorioGastos;
 import tds.gestiongastos.adapters.repository.RepositorioCategorias;
@@ -26,7 +28,8 @@ import tds.gestiongastos.adapters.repository.RepositorioNotificaciones;
 public class GestionGastos {
 
     private RepositorioCuentas repoCuentas;
-    private RepositorioGastos repoGastos;
+    @SuppressWarnings("unused")
+	private RepositorioGastos repoGastos;
     private RepositorioCategorias repoCategorias;
     private RepositorioAlertas repoAlertas;
     private RepositorioNotificaciones repoNotificaciones;
@@ -58,16 +61,19 @@ public class GestionGastos {
     public TipoCuenta getCuentaActiva() {
         return this.cuentaActiva;
     }
+    
+    public List<Categoria> getTodasCategorias() {
+        return repoCategorias.getAllCategorias();
+    }
 
     public void registrarGasto(String descripcion, double cantidad, LocalDate fecha, String nombreCategoria) {
         if (cuentaActiva == null) throw new IllegalStateException("No hay cuenta activa seleccionada");
 
         Categoria categoria = repoCategorias.findByNombre(nombreCategoria);
     
-        Gasto nuevoGasto = new GastoImpl(descripcion, cantidad, fecha, (tds.gestiongastos.modelo.impl.CategoriaImpl) categoria);
-
-        cuentaActiva.agregarGasto(nuevoGasto);
+        Gasto nuevoGasto = new GastoImpl(descripcion, cantidad, fecha, (CategoriaImpl) categoria);
         
+        cuentaActiva.agregarGasto(nuevoGasto);
         repoCuentas.updateCuenta(cuentaActiva);
         
         checkAlertas(nuevoGasto);
@@ -97,6 +103,37 @@ public class GestionGastos {
                 .collect(Collectors.toList());
     }
 
+    
+    public Map<String, Double> obtenerGastosPorCategoria() {
+        if (cuentaActiva == null) return new HashMap<>();
+        
+        return cuentaActiva.getGastos().stream()
+            .collect(Collectors.groupingBy(
+                g -> g.getCategoria().getNombre(),
+                Collectors.summingDouble(Gasto::getCantidad)
+            ));
+    }
+
+    public Map<String, Double> obtenerGastosPorFecha() {
+        if (cuentaActiva == null) return new HashMap<>();
+
+        return cuentaActiva.getGastos().stream()
+            .collect(Collectors.groupingBy(
+                g -> g.getFecha().toString(),
+                Collectors.summingDouble(Gasto::getCantidad)
+            ));
+    }
+    
+    
+    public boolean registrarCategoria(String nombre, String descripcion) {
+        if (repoCategorias.findByNombre(nombre) != null) {
+            return false;
+        }
+        CategoriaImpl nuevaCategoria = new CategoriaImpl(nombre, descripcion);
+        repoCategorias.addCategoria(nuevaCategoria);
+        return true;
+    }
+    
 
     public void configurarAlerta(String tipo, double limite, Categoria categoria) {
         Alerta nuevaAlerta = new AlertaImpl(tipo, limite, (tds.gestiongastos.modelo.impl.CategoriaImpl) categoria);
@@ -118,6 +155,6 @@ public class GestionGastos {
     }
 
     public void importarDatos(String rutaFichero) {
-       
+       //falta la implementación de esta parte, usando el patron Adaptador
     }
 }

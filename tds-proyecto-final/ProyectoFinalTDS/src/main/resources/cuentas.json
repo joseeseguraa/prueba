@@ -1,28 +1,14 @@
-[
-  {
-    "tipo": "personal",
-    "nombre": "Mi Cuenta Principal",
-    "gastos": [
-      {
-        "id": "gasto-001",
-        "descripcion": "Compra Supermercado",
-        "cantidad": 45.50,
-        "fecha": "09/12/2025",
-        "categoria": {
-          "nombre": "Alimentación",
-          "descripcion": "Comida y bebida"
-        }
-      },
-      {
-        "id": "gasto-002",
-        "descripcion": "Gasolina",
-        "cantidad": 30.00,
-        "fecha": "08/12/2025",
-        "categoria": {
-          "nombre": "Transporte",
-          "descripcion": "Desplazamientos"
-        }
-      }
-    ]
-  }
-]
+[ {
+  "saldoTotal" : 45.0,
+  "nombre" : "Mi Cuenta Personal",
+  "gastos" : [ {
+    "id" : "a14d4cd1-b0e0-4603-aa85-e3b6f2b70997",
+    "descripcion" : "",
+    "cantidad" : 45.0,
+    "fecha" : "13/12/2025",
+    "categoria" : {
+      "nombre" : "Ocio",
+      "descripcion" : "Entretenimiento y suscripciones"
+    }
+  } ]
+} ]

@@ -14,64 +14,73 @@ import tds.gestiongastos.modelo.impl.CategoriaImpl;
 
 public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
-	private List<CategoriaImpl> categorias = new ArrayList<CategoriaImpl>();
-	private final String RUTA_FICHERO = "src/main/resources/categorias.json";
+    private List<CategoriaImpl> categorias = null;
+    private final String RUTA_FICHERO = "src/main/resources/categorias.json";
 
-	public RepositorioCategoriasImpl() {
-	}
+    @Override
+    public List<Categoria> getAllCategorias() {
+        if (categorias == null) {
+            cargarDatos();
+        }
+        return new ArrayList<>(categorias);
+    }
 
-	@Override
-	public List<Categoria> getAllCategorias() {
-		if (categorias == null) {
-			cargarDatos();
-		}
-		return new ArrayList<>(categorias);
-	}
+    @Override
+    public void addCategoria(Categoria categoria) {
+        if (categorias == null) cargarDatos();
 
-	@Override
-	public void addCategoria(Categoria categoria) {
-		if (categorias == null)
-			cargarDatos();
+        if (categoria instanceof CategoriaImpl) {
+            categorias.add((CategoriaImpl) categoria);
+            guardarDatos();
+        }
+    }
 
-		if (categoria instanceof CategoriaImpl) {
-			categorias.add((CategoriaImpl) categoria);
-			guardarDatos();
-		}
-	}
+    @Override
+    public Categoria findByNombre(String nombre) {
+        if (categorias == null) cargarDatos();
 
-	@Override
-	public Categoria findByNombre(String nombre) {
-		if (categorias == null)
-			cargarDatos();
+        return categorias.stream()
+                .filter(c -> c.getNombre().equalsIgnoreCase(nombre))
+                .findFirst()
+                .orElse(null);
+    }
 
-		return categorias.stream().filter(c -> c.getNombre().equalsIgnoreCase(nombre)).findFirst().orElse(null);
-	}
+    private void cargarDatos() {
+        try {
+            File fichero = new File(RUTA_FICHERO);
+            if (!fichero.exists() || fichero.length() == 0) {
+                iniciarCategoriasPorDefecto();
+                return;
+            }
 
+            ObjectMapper mapper = new ObjectMapper();
+            categorias = mapper.readValue(fichero, new TypeReference<List<CategoriaImpl>>() {});
 
-	private void cargarDatos() {
-		try {
-			File fichero = new File(RUTA_FICHERO);
-			if (!fichero.exists()) {
-				categorias = new ArrayList<>();
-				return;
-			}
+        } catch (IOException e) {
+            System.out.println(">> Aviso: Error leyendo categorias.json. Se regenerará con valores por defecto.");
+            iniciarCategoriasPorDefecto();
+        }
+    }
 
-			ObjectMapper mapper = new ObjectMapper();
-			categorias = mapper.readValue(fichero, new TypeReference<List<CategoriaImpl>>() {
-			});
+    private void iniciarCategoriasPorDefecto() {
+        categorias = new ArrayList<>();
+        categorias.add(new CategoriaImpl("Alimentación", "Comida y supermercado"));
+        categorias.add(new CategoriaImpl("Transporte", "Gasolina, bus, tren"));
+        categorias.add(new CategoriaImpl("Ocio", "Cine, cenas, salidas"));
+        categorias.add(new CategoriaImpl("Vivienda", "Alquiler, luz, agua"));
+        guardarDatos();
+    }
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			categorias = new ArrayList<>();
-		}
-	}
-
-	private void guardarDatos() {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.writerWithDefaultPrettyPrinter().writeValue(new File(RUTA_FICHERO), categorias);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    private void guardarDatos() {
+        try {
+            File fichero = new File(RUTA_FICHERO);
+            if (fichero.getParentFile() != null) {
+                fichero.getParentFile().mkdirs();
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writerWithDefaultPrettyPrinter().writeValue(fichero, categorias);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

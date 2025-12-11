@@ -10,6 +10,7 @@
         "fecha": "12/12/2025",
         "categoria": {
           "nombre": "Alimentación",
+          "descripcion": "Comida y bebida"
         }
       },
       {
@@ -19,6 +20,7 @@
         "fecha": "15/12/2025",
         "categoria": {
           "nombre": "Ocio",
+          "descripcion": "Entretenimiento y suscripciones"
         }
       }
     ]

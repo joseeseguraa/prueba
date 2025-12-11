@@ -106,18 +106,22 @@
                 <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="filter-container">
                     <children>
                         <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="Filtros:" />
+
                         <VBox spacing="2.0">
                             <Label styleClass="filter-label" text="Desde" />
-                            <DatePicker prefWidth="110.0" promptText="Inicio" />
+                            <DatePicker fx:id="dateDesde" prefWidth="110.0" promptText="Inicio" />
                         </VBox>
+
                         <VBox spacing="2.0">
                             <Label styleClass="filter-label" text="Hasta" />
-                            <DatePicker prefWidth="110.0" promptText="Fin" />
+                            <DatePicker fx:id="dateHasta" prefWidth="110.0" promptText="Fin" />
                         </VBox>
+
                         <VBox spacing="2.0">
                             <Label styleClass="filter-label" text="Categoría" />
-                            <ComboBox prefWidth="130.0" promptText="Todas" />
+                            <ComboBox fx:id="comboCategoriasFiltro" prefWidth="130.0" promptText="Todas" />
                         </VBox>
+
                         <Region HBox.hgrow="ALWAYS" />
                         <Button mnemonicParsing="false" onAction="#botonAplicarFiltro" styleClass="btn-filter-action" text="Aplicar Filtros" />
                     </children>

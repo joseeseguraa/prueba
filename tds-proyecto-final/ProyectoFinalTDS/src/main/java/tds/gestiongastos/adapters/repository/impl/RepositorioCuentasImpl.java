@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule; // Importante para 
 
 import tds.gestiongastos.adapters.repository.RepositorioCuentas;
 import tds.gestiongastos.modelo.TipoCuenta;
+import tds.gestiongastos.modelo.impl.CuentaPersonalImpl;
 import tds.gestiongastos.modelo.impl.TipoCuentaImpl;
 
 public class RepositorioCuentasImpl implements RepositorioCuentas {
@@ -51,37 +52,48 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
 		guardarDatos();
 	}
 
-	// --- PERSISTENCIA ---
+	//parte persistencia
 
 	private void cargarDatos() {
-		try {
-			File fichero = new File(RUTA_FICHERO);
-			if (!fichero.exists()) {
-				cuentas = new ArrayList<>();
-				return;
-			}
+        try {
+            File fichero = new File(RUTA_FICHERO);
+            
+            if (!fichero.exists() || fichero.length() == 0) {
+                iniciarCuentaPorDefecto();
+                return;
+            }
 
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
 
-			// Jackson detectará gracias a @JsonTypeInfo si es Personal o Compartida
-			cuentas = mapper.readValue(fichero, new TypeReference<List<TipoCuentaImpl>>() {
-			});
+            cuentas = mapper.readValue(fichero, new TypeReference<List<TipoCuentaImpl>>() {});
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			cuentas = new ArrayList<>();
-		}
-	}
+        } catch (IOException e) {
+            System.out.println(">> Aviso: El archivo de datos estaba dañado o incompleto. Se ha reiniciado.");
+            iniciarCuentaPorDefecto();
+        }
+    }
+    
+    private void iniciarCuentaPorDefecto() {
+        cuentas = new ArrayList<>();
+        CuentaPersonalImpl cuentaDefault = new CuentaPersonalImpl("Mi Cuenta Personal");
+        cuentas.add(cuentaDefault);
+        guardarDatos();
+    }
 
-	private void guardarDatos() {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
+    private void guardarDatos() {
+        try {
+            File fichero = new File(RUTA_FICHERO);
+            if (fichero.getParentFile() != null) {
+                fichero.getParentFile().mkdirs();
+            }
 
-			mapper.writerWithDefaultPrettyPrinter().writeValue(new File(RUTA_FICHERO), cuentas);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+
+            mapper.writerWithDefaultPrettyPrinter().writeValue(fichero, cuentas);
+        } catch (IOException e) {
+            System.err.println("Error: No se pudieron guardar los datos.");
+        }
+    }
 }
