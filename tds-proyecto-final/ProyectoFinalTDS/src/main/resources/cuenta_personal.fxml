@@ -33,7 +33,7 @@
                     <children>
                         <Button mnemonicParsing="false" onAction="#botonImportarDatos" styleClass="btn-importar" text="Importar Datos" />
 
-                        <Button alignment="CENTER" contentDisplay="LEFT" mnemonicParsing="false" onAction="#botonHistorialNotificaciones" styleClass="btn-notificaciones" text="Historial Notificaciones" textAlignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#botonHistorialNotificaciones" styleClass="btn-notificaciones" text="Historial Notificaciones">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
                                     <image>
@@ -142,10 +142,10 @@
 
                                 <TableView fx:id="tablaGastos" styleClass="custom-table" VBox.vgrow="ALWAYS">
                                     <columns>
-                                        <TableColumn fx:id="colFecha" prefWidth="90.0" text="Fecha" />
-                                        <TableColumn fx:id="colCategoria" prefWidth="120.0" text="Categoría" />
-                                        <TableColumn fx:id="colDescripcion" prefWidth="200.0" text="Concepto" />
-                                        <TableColumn fx:id="colImporte" prefWidth="90.0" text="Importe" />
+                                        <TableColumn fx:id="colFecha" prefWidth="119.0" text="Fecha" />
+                                        <TableColumn fx:id="colImporte" prefWidth="118.0" text="Importe" />
+                                        <TableColumn fx:id="colCategoria" prefWidth="186.0" text="Categoría" />
+                                        <TableColumn fx:id="colDescripcion" prefWidth="194.0" text="Concepto" />
                                         </columns>
                                         </TableView>
                                     </children>

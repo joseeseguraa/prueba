@@ -26,14 +26,21 @@
     -fx-background-radius: 4;
 }
 
-.btn-importar, .btn-notificaciones {
-    -fx-text-fill: white;
+.button {
     -fx-font-weight: bold;
-    -fx-background-radius: 4;
-    -fx-padding: 5 15;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-size: 14;
+    -fx-cursor: hand;
 }
-.btn-importar { -fx-background-color: #2ecc71; }
-.btn-notificaciones { -fx-background-color: #e74c3c; }
+
+.btn-importar {
+    -fx-background-color: #2ecc71;
+}
+
+.btn-notificaciones {
+    -fx-background-color: #e74c3c;
+}
 
 /* Menu lateral */
 .sidebar {

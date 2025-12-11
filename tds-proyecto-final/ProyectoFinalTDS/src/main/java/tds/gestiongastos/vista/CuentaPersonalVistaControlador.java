@@ -1,71 +1,68 @@
 package tds.gestiongastos.vista;
 
+import java.time.LocalDate;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import tds.gestiongastos.main.Configuracion;
+import tds.gestiongastos.modelo.Gasto;
+import tds.gestiongastos.modelo.TipoCuenta;
 
 public class CuentaPersonalVistaControlador {
 
+    @FXML private TableView<Gasto> tablaGastos;
+    @FXML private TableColumn<Gasto, LocalDate> colFecha;
+    @FXML private TableColumn<Gasto, String> colCategoria;
+    @FXML private TableColumn<Gasto, String> colDescripcion;
+    @FXML private TableColumn<Gasto, Double> colImporte;
+
     @FXML
     public void initialize() {
-        System.out.println("Vista Personal cargada con éxito.");
+        System.out.println("Inicializando tabla de gastos...");
+        
+        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        colImporte.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        colCategoria.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getCategoria().getNombre()));
+
+        cargarDatosTabla();
+    }
+
+    private void cargarDatosTabla() {
+        TipoCuenta cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
+        
+        if (cuenta != null) {
+            System.out.println("Cargando gastos de: " + cuenta.getNombre());
+            ObservableList<Gasto> lista = FXCollections.observableArrayList(cuenta.getGastos());
+            tablaGastos.setItems(lista);
+        } else {
+            System.out.println("AVISO: No hay cuenta activa seleccionada.");
+        }
     }
 
     @FXML
     public void botonVolver(ActionEvent event) {
-        System.out.println("Volviendo al menú principal...");
         Configuracion.getInstancia().getSceneManager().showVentanaPrincipal();
     }
-
-    @FXML
-    public void botonImportarDatos(ActionEvent event) {
-        System.out.println("Importar datos...");
-    }
-
-    @FXML
-    public void botonHistorialNotificaciones(ActionEvent event) {
-        System.out.println("Ver notificaciones...");
-    }
-
-    @FXML
-    public void botonVolverCuentaPersonal(ActionEvent event) {
-        System.out.println("Ya estás en el Dashboard.");
-    }
-
-    @FXML
-    public void botonAlertas(ActionEvent event) {
-        System.out.println("Ir a Alertas...");
-        // Configuracion.getInstancia().getSceneManager().showAlertas();
-    }
-
-    @FXML
-    public void botonGrafico(ActionEvent event) {
-        System.out.println("Ir a Gráficos...");
-    }
-
-    @FXML
-    public void botonCalendario(ActionEvent event) {
-        System.out.println("Ir a Calendario...");
-    }
-
-    @FXML
-    public void botonCategorias(ActionEvent event) {
-        System.out.println("Ir a Categorías...");
-    }
-
-    @FXML
-    public void botonEliminarGasto(ActionEvent event) {
-        System.out.println("Eliminar gasto seleccionado...");
-    }
-
+    
     @FXML
     public void abrirVentanaNuevoGasto(ActionEvent event) {
-        System.out.println("Abriendo diálogo nuevo gasto...");
         Configuracion.getInstancia().getSceneManager().showNuevoGasto();
     }
 
-    @FXML
-    public void botonAplicarFiltro(ActionEvent event) {
-        System.out.println("Aplicando filtros...");
-    }
+    @FXML public void botonImportarDatos(ActionEvent event) {}
+    @FXML public void botonHistorialNotificaciones(ActionEvent event) {}
+    @FXML public void botonVolverCuentaPersonal(ActionEvent event) {}
+    @FXML public void botonAlertas(ActionEvent event) {}
+    @FXML public void botonGrafico(ActionEvent event) {}
+    @FXML public void botonCalendario(ActionEvent event) {}
+    @FXML public void botonCategorias(ActionEvent event) {}
+    @FXML public void botonEliminarGasto(ActionEvent event) {}
+    @FXML public void botonAplicarFiltro(ActionEvent event) {}
 }

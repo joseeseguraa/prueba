@@ -1,0 +1,26 @@
+[
+  {
+    "tipo": "personal",
+    "nombre": "Mi Cuenta Personal",
+    "gastos": [
+      {
+        "id": "gasto-test-01",
+        "descripcion": "Compra Supermercado",
+        "cantidad": 50.0,
+        "fecha": "12/12/2025",
+        "categoria": {
+          "nombre": "Alimentación",
+        }
+      },
+      {
+        "id": "gasto-test-02",
+        "descripcion": "Netflix",
+        "cantidad": 12.99,
+        "fecha": "15/12/2025",
+        "categoria": {
+          "nombre": "Ocio",
+        }
+      }
+    ]
+  }
+]

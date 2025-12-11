@@ -1,0 +1,28 @@
+[
+  {
+    "tipo": "personal",
+    "nombre": "Mi Cuenta Principal",
+    "gastos": [
+      {
+        "id": "gasto-001",
+        "descripcion": "Compra Supermercado",
+        "cantidad": 45.50,
+        "fecha": "09/12/2025",
+        "categoria": {
+          "nombre": "Alimentación",
+          "descripcion": "Comida y bebida"
+        }
+      },
+      {
+        "id": "gasto-002",
+        "descripcion": "Gasolina",
+        "cantidad": 30.00,
+        "fecha": "08/12/2025",
+        "categoria": {
+          "nombre": "Transporte",
+          "descripcion": "Desplazamientos"
+        }
+      }
+    ]
+  }
+]
