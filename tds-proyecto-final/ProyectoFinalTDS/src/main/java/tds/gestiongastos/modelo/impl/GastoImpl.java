@@ -2,18 +2,16 @@ package tds.gestiongastos.modelo.impl;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import tds.gestiongastos.modelo.Categoria;
 import tds.gestiongastos.modelo.Gasto;
 
 public class GastoImpl implements Gasto {
 
     @JsonProperty("id")
-    private final String id;
+    private String id;
     
     @JsonProperty("descripcion")
     private String descripcion;
@@ -41,8 +39,12 @@ public class GastoImpl implements Gasto {
         this.categoria = categoria;
     }
 
-
     @Override public String getId() { return id; }
+
+    public void setId(String id) { 
+        this.id = id; 
+    }
+
     @Override public String getDescripcion() { return descripcion; }
     @Override public double getCantidad() { return cantidad; }
     @Override public LocalDate getFecha() { return fecha; }

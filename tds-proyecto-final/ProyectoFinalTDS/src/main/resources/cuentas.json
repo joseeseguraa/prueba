@@ -1,14 +1,4 @@
 [ {
-  "saldoTotal" : 45.0,
   "nombre" : "Mi Cuenta Personal",
-  "gastos" : [ {
-    "id" : "a14d4cd1-b0e0-4603-aa85-e3b6f2b70997",
-    "descripcion" : "",
-    "cantidad" : 45.0,
-    "fecha" : "13/12/2025",
-    "categoria" : {
-      "nombre" : "Ocio",
-      "descripcion" : "Entretenimiento y suscripciones"
-    }
-  } ]
+  "gastos" : [ ]
 } ]

@@ -62,7 +62,7 @@ public class SceneManager {
             dialog.showAndWait();
             
         } catch (IOException e) {
-            e.printStackTrace(); // Importante para ver errores de carga
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

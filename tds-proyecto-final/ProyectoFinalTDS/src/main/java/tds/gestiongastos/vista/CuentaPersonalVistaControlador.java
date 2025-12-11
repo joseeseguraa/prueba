@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -31,6 +32,8 @@ public class CuentaPersonalVistaControlador {
     @FXML private DatePicker dateDesde;
     @FXML private DatePicker dateHasta;
     @FXML private ComboBox<Categoria> comboCategoriasFiltro;
+    
+    @FXML private Label lblGastoTotal;
     
     @FXML
     public void initialize() {
@@ -63,16 +66,30 @@ public class CuentaPersonalVistaControlador {
         });
     }
     
+    
     private void cargarDatosTabla(List<Gasto> datosFiltrados) {
-        if (datosFiltrados != null) {
-            tablaGastos.setItems(FXCollections.observableArrayList(datosFiltrados));
-            return;
-        }
-
         TipoCuenta cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
-        if (cuenta != null) {
-            ObservableList<Gasto> lista = FXCollections.observableArrayList(cuenta.getGastos());
-            tablaGastos.setItems(lista);
+        
+        ObservableList<Gasto> lista;
+        if (datosFiltrados != null) {
+            lista = FXCollections.observableArrayList(datosFiltrados);
+        } else if (cuenta != null) {
+            lista = FXCollections.observableArrayList(cuenta.getGastos());
+        } else {
+            lista = FXCollections.observableArrayList();
+        }
+        tablaGastos.setItems(lista);
+
+        actualizarEtiquetaTotal(lista);
+    }
+    
+    private void actualizarEtiquetaTotal(List<Gasto> listaGastos) {
+        if (lblGastoTotal != null) {
+            double total = listaGastos.stream()
+                                      .mapToDouble(Gasto::getCantidad)
+                                      .sum();
+            
+            lblGastoTotal.setText(String.format("%.2f €", total));
         }
     }
 

@@ -97,7 +97,7 @@
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label styleClass="stat-label" text="Gastado este mes" />
-                                <Label styleClass="stat-value" text="450.00 €" />
+                                <Label fx:id="lblGastoTotal" styleClass="stat-value" text="0.00 €" />
                             </children>
                         </VBox>
                     </children>

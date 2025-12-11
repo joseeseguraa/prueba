@@ -16,10 +16,9 @@ import tds.gestiongastos.modelo.Categoria;
 
 public class GastoVistaControlador {
 
-    // --- IDs corregidos para coincidir con tu FXML ---
-    @FXML private TextField txtGastoImporte;      // Antes txtImporte
+    @FXML private TextField txtGastoImporte;
     @FXML private TextField txtGastoDescripcion;
-    @FXML private DatePicker dateGastoFecha;      // Antes dateFecha
+    @FXML private DatePicker dateGastoFecha;
     @FXML private ComboBox<Categoria> comboGastoCategoria;
 
     @FXML
@@ -27,7 +26,7 @@ public class GastoVistaControlador {
         List<Categoria> categorias = Configuracion.getInstancia().getGestionGastos().getTodasCategorias();
         comboGastoCategoria.setItems(FXCollections.observableArrayList(categorias));
 
-        // Conversor para mostrar solo el nombre de la categoría en el combo
+
         comboGastoCategoria.setConverter(new StringConverter<Categoria>() {
             @Override
             public String toString(Categoria c) {
@@ -43,7 +42,6 @@ public class GastoVistaControlador {
     @FXML
     public void guardarGasto(ActionEvent event) {
         try {
-            // Validaciones básicas
             if (txtGastoImporte.getText().isEmpty() || dateGastoFecha.getValue() == null || comboGastoCategoria.getValue() == null) {
                 mostrarAlerta("Campos vacíos", "Por favor rellena importe, fecha y categoría.");
                 return;
@@ -52,7 +50,6 @@ public class GastoVistaControlador {
             double importe = Double.parseDouble(txtGastoImporte.getText());
             String desc = (txtGastoDescripcion.getText() != null) ? txtGastoDescripcion.getText() : "Sin concepto"; 
             
-            // Llamada al negocio
             Configuracion.getInstancia().getGestionGastos().registrarGasto(
                 desc, 
                 importe, 
@@ -75,16 +72,13 @@ public class GastoVistaControlador {
         cerrarVentana();
     }
     
-    // RENOMBRADO: En tu FXML este botón llama a #botonCategorias, no a #abrirNuevaCategoria
     @FXML
     public void botonCategorias(ActionEvent event) {
         Configuracion.getInstancia().getSceneManager().showNuevaCategoria();
-        // Recargar el combo al volver por si se creó una nueva
         initialize();
     }
 
     private void cerrarVentana() {
-        // Usamos uno de los componentes para obtener la Scene y cerrarla
         Stage stage = (Stage) txtGastoImporte.getScene().getWindow();
         stage.close();
     }
