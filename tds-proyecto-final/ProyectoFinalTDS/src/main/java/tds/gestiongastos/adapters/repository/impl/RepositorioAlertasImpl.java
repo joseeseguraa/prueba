@@ -35,13 +35,13 @@ public class RepositorioAlertasImpl implements RepositorioAlertas {
     public void removeAlerta(Alerta alerta) {
         this.alertas.remove(alerta);
         guardarDatos();
-    }    
+    }
 
     @Override
     public List<Alerta> getAllAlertas() {
         return Collections.unmodifiableList(alertas);
     }
-    
+
 
     private void cargarDatos() {
         try {

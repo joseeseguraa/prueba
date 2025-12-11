@@ -29,4 +29,10 @@ public class MainVistaControlador {
     public void botonAccederCompartidas(ActionEvent event) {
         System.out.println("Accediendo a Cuentas Compartidas...");
     }
+
+    @FXML
+    public void botonCrearCompartida(ActionEvent event) {
+        System.out.println("Crear nueva cuenta compartida...");
+        Configuracion.getInstancia().getSceneManager().showCrearCuentaCompartida();
+    }
 }

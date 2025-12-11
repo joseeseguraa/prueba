@@ -27,6 +27,10 @@ public class SceneManager {
     public void showCuentaPersonal() {
     	cargarYMostar("cuenta_personal");
     }
+    
+    public void showCrearCuentaCompartida() {
+    	cargarYMostar("crearCompartida");
+    }
 
     
     public void showNuevoGasto() {
