@@ -2,10 +2,12 @@ package tds.gestiongastos.modelo.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import tds.gestiongastos.modelo.Gasto;
 import tds.gestiongastos.modelo.TipoCuenta;
 
@@ -55,9 +57,9 @@ public abstract class TipoCuentaImpl implements TipoCuenta {
 	public void eliminarGasto(Gasto gasto) {
 		this.gastos.remove(gasto);
 	}
-	
+
 	@Override
-    @JsonIgnore 
+    @JsonIgnore
     public double getSaldoTotal() {
         return gastos.stream().mapToDouble(GastoImpl::getCantidad).sum();
     }

@@ -5,11 +5,11 @@ public interface Alerta {
 
 	double getLimite();
 
-	Categoria getCategoriaMonitorizada();
-
 	boolean comprobar(Gasto gastoNuevo, TipoCuenta cuenta);
 
 	Notificacion crearNotificacion();
 
 	String getIdAlerta();
+	
+	Categoria getCategoria();
 }

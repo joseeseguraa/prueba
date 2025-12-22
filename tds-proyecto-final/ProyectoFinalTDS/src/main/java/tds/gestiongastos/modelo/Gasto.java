@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public interface Gasto {
 	String getId();
-	
+
 	String getDescripcion();
 
 	double getCantidad();

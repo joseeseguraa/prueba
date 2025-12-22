@@ -2,7 +2,9 @@ package tds.gestiongastos.modelo.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import tds.gestiongastos.modelo.ParticipanteCuenta;
 
 public class CuentaCompartidaImpl extends TipoCuentaImpl {

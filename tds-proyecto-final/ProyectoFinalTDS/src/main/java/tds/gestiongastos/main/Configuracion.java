@@ -7,13 +7,13 @@ public abstract class Configuracion {
 
 	private static Configuracion instancia;
 	private final SceneManager sceneManager = new SceneManager();
-	
+
 	public static Configuracion getInstancia() {
 		return Configuracion.instancia;
 	}
 
 	static void setInstancia(Configuracion impl) {
-		Configuracion.instancia = impl; 
+		Configuracion.instancia = impl;
 	}
 
     public SceneManager getSceneManager() {

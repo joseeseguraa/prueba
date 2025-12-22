@@ -6,24 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
-import tds.gestiongastos.modelo.Alerta;
-import tds.gestiongastos.modelo.Categoria;
-import tds.gestiongastos.modelo.TipoCuenta;
-import tds.gestiongastos.modelo.Gasto;
-import tds.gestiongastos.modelo.Notificacion;
-
-
-import tds.gestiongastos.modelo.impl.CuentaCompartidaImpl;
-import tds.gestiongastos.modelo.impl.GastoImpl;
-import tds.gestiongastos.modelo.impl.AlertaImpl;
-import tds.gestiongastos.modelo.impl.CategoriaImpl;
-
+import tds.gestiongastos.adapters.repository.RepositorioAlertas;
+import tds.gestiongastos.adapters.repository.RepositorioCategorias;
 import tds.gestiongastos.adapters.repository.RepositorioCuentas;
 import tds.gestiongastos.adapters.repository.RepositorioGastos;
-import tds.gestiongastos.adapters.repository.RepositorioCategorias;
-import tds.gestiongastos.adapters.repository.RepositorioAlertas;
 import tds.gestiongastos.adapters.repository.RepositorioNotificaciones;
+import tds.gestiongastos.modelo.Alerta;
+import tds.gestiongastos.modelo.Categoria;
+import tds.gestiongastos.modelo.Gasto;
+import tds.gestiongastos.modelo.Notificacion;
+import tds.gestiongastos.modelo.TipoCuenta;
+import tds.gestiongastos.modelo.impl.AlertaImpl;
+import tds.gestiongastos.modelo.impl.CategoriaImpl;
+import tds.gestiongastos.modelo.impl.CuentaCompartidaImpl;
+import tds.gestiongastos.modelo.impl.GastoImpl;
 
 public class GestionGastos {
 
@@ -49,7 +45,7 @@ public class GestionGastos {
         repoCuentas.addCuenta(nuevaCuenta);
         return nuevaCuenta;
     }
-    
+
     public List<TipoCuenta> getCuentasDisponibles() {
         return repoCuentas.getAllCuentas();
     }
@@ -61,21 +57,23 @@ public class GestionGastos {
     public TipoCuenta getCuentaActiva() {
         return this.cuentaActiva;
     }
-    
+
     public List<Categoria> getTodasCategorias() {
         return repoCategorias.getAllCategorias();
     }
 
     public void registrarGasto(String descripcion, double cantidad, LocalDate fecha, String nombreCategoria) {
-        if (cuentaActiva == null) throw new IllegalStateException("No hay cuenta activa seleccionada");
+        if (cuentaActiva == null) {
+			throw new IllegalStateException("No hay cuenta activa seleccionada");
+		}
 
         Categoria categoria = repoCategorias.findByNombre(nombreCategoria);
-    
+
         Gasto nuevoGasto = new GastoImpl(descripcion, cantidad, fecha, (CategoriaImpl) categoria);
-        
+
         cuentaActiva.agregarGasto(nuevoGasto);
         repoCuentas.updateCuenta(cuentaActiva);
-        
+
         checkAlertas(nuevoGasto);
     }
 
@@ -86,15 +84,23 @@ public class GestionGastos {
         }
     }
 
-    public void modificarGasto(Gasto gasto, String nuevaDesc, double nuevaCant) {
+    public void modificarGasto(Gasto gasto, String nuevaDesc, double nuevaCant, LocalDate nuevaFecha, String nuevaCategoria) {
         gasto.setDescripcion(nuevaDesc);
         gasto.setCantidad(nuevaCant);
+        gasto.setFecha(nuevaFecha);
+        
+        Categoria cat = repoCategorias.findByNombre(nuevaCategoria);
+        if (cat != null) {
+            gasto.setCategoria(cat);
+        }
         repoCuentas.updateCuenta(cuentaActiva);
     }
 
 
     public List<Gasto> filtrarGastos(LocalDate inicio, LocalDate fin, Categoria categoria) {
-        if (cuentaActiva == null) return List.of();
+        if (cuentaActiva == null) {
+			return List.of();
+		}
 
         return cuentaActiva.getGastos().stream()
                 .filter(g -> (inicio == null || !g.getFecha().isBefore(inicio)))
@@ -103,10 +109,12 @@ public class GestionGastos {
                 .collect(Collectors.toList());
     }
 
-    
+
     public Map<String, Double> obtenerGastosPorCategoria() {
-        if (cuentaActiva == null) return new HashMap<>();
-        
+        if (cuentaActiva == null) {
+			return new HashMap<>();
+		}
+
         return cuentaActiva.getGastos().stream()
             .collect(Collectors.groupingBy(
                 g -> g.getCategoria().getNombre(),
@@ -115,7 +123,9 @@ public class GestionGastos {
     }
 
     public Map<String, Double> obtenerGastosPorFecha() {
-        if (cuentaActiva == null) return new HashMap<>();
+        if (cuentaActiva == null) {
+			return new HashMap<>();
+		}
 
         return cuentaActiva.getGastos().stream()
             .collect(Collectors.groupingBy(
@@ -123,18 +133,47 @@ public class GestionGastos {
                 Collectors.summingDouble(Gasto::getCantidad)
             ));
     }
-    
-    
-    public boolean registrarCategoria(String nombre, String descripcion) {
+
+
+    public boolean registrarCategoria(String nombre) {
         if (repoCategorias.findByNombre(nombre) != null) {
             return false;
         }
-        CategoriaImpl nuevaCategoria = new CategoriaImpl(nombre, descripcion);
+        CategoriaImpl nuevaCategoria = new CategoriaImpl(nombre);
         repoCategorias.addCategoria(nuevaCategoria);
         return true;
     }
+
+    
+    public void eliminarCategoria(Categoria categoria) {
+    	boolean enGastos = repoCuentas.getAllCuentas().stream()
+                .flatMap(c -> c.getGastos().stream())
+                .anyMatch(g -> g.getCategoria().equals(categoria));
+
+        if (enGastos) {
+            throw new IllegalStateException("No se puede eliminar: Hay gastos asociados.");
+        }
+
+        boolean enAlertas = repoAlertas.getAllAlertas().stream()
+                .anyMatch(a -> a.getCategoria() != null && a.getCategoria().equals(categoria));
+
+        if (enAlertas) {
+            throw new IllegalStateException("No se puede eliminar: Hay una alerta configurada para esta categoría.");
+        }
+        
+        repoCategorias.borrarCategoria(categoria); 
+    }
     
 
+    public List<Alerta> getAlertas() {
+        return repoAlertas.getAllAlertas();
+    }
+
+    public void borrarAlerta(Alerta alerta) {
+    	repoAlertas.removeAlerta(alerta); 
+    }
+    
+    
     public void configurarAlerta(String tipo, double limite, Categoria categoria) {
         Alerta nuevaAlerta = new AlertaImpl(tipo, limite, (tds.gestiongastos.modelo.impl.CategoriaImpl) categoria);
         repoAlertas.addAlerta(nuevaAlerta);

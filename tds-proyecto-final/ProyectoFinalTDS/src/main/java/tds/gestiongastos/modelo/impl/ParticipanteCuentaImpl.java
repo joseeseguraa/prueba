@@ -1,6 +1,7 @@
 package tds.gestiongastos.modelo.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import tds.gestiongastos.modelo.ParticipanteCuenta;
 
 public class ParticipanteCuentaImpl implements ParticipanteCuenta {

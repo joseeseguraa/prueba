@@ -1,6 +1,7 @@
 package tds.gestiongastos.modelo.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import tds.gestiongastos.modelo.Categoria;
 
 public class CategoriaImpl implements Categoria {
@@ -8,15 +9,11 @@ public class CategoriaImpl implements Categoria {
 	@JsonProperty("nombre")
 	private String nombre;
 
-	@JsonProperty("descripcion")
-	private String descripcion;
-
 	public CategoriaImpl() {
 	}
 
-	public CategoriaImpl(String nombre, String descripcion) {
+	public CategoriaImpl(String nombre) {
 		this.nombre = nombre;
-		this.descripcion = descripcion;
 	}
 
 	@Override
@@ -24,18 +21,35 @@ public class CategoriaImpl implements Categoria {
 		return nombre;
 	}
 
-	@Override
-	public String getDescripcion() {
-		return descripcion;
-	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
+	}	
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CategoriaImpl other = (CategoriaImpl) obj;
+        if (nombre == null) {
+            if (other.nombre != null)
+                return false;
+        } else if (!nombre.equals(other.nombre))
+            return false;
+        return true;
+    }
+
 
 	@Override
 	public String toString() {

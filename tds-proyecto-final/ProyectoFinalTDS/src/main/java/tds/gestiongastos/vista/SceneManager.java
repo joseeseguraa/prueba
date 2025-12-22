@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import tds.gestiongastos.modelo.Gasto;
 
 public class SceneManager {
 
@@ -26,12 +27,11 @@ public class SceneManager {
     public void showCuentaPersonal() {
     	cargarYMostar("cuenta_personal");
     }
-    
+
     public void showCrearCuentaCompartida() {
     	cargarYMostarDialogo("crearCompartida", "Nueva Cuenta Compartida");
     }
 
-    
     public void showNuevoGasto() {
     	cargarYMostarDialogo("nuevo_gasto", "Registrar Nuevo Gasto");
     }
@@ -41,26 +41,48 @@ public class SceneManager {
     }
 
     public void showNuevaAlerta() {
-    	cargarYMostarDialogo("nueva_alerta.fxml", "Crear Alerta");
+    	cargarYMostarDialogo("nueva_alerta", "Crear Alerta");
     }
 
-    public void showCalendario() {
-    	cargarYMostarDialogo("calendario.fxml", "Abrir Calendario");
+    public void showEstadoLimites() {
+        cargarYMostarDialogo("verLimitesYAlertas", "Estado de Límites");
     }
     
-    
+    public void showCalendario() {
+    	cargarYMostarDialogo("calendario", "Abrir Calendario");
+    }
+
+    public void showEditarGasto(Gasto gastoAEditar) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/nuevo_gasto.fxml"));
+            Parent root = loader.load();
+            
+            GastoVistaControlador controller = loader.getController();
+            controller.setGasto(gastoAEditar);
+            
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setTitle("Editar Gasto");
+            dialog.initStyle(StageStyle.UTILITY);
+            dialog.getDialogPane().setContent(root);
+            dialog.showAndWait();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void cargarYMostarDialogo(String fxml, String titulo) {
         try {
             Parent root = loadFXML(fxml);
-            
+
             Dialog<Void> dialog = new Dialog<>();
             dialog.setTitle(titulo);
             dialog.initStyle(StageStyle.UTILITY);
-            
+
             dialog.getDialogPane().setContent(root);
-            
+
             dialog.showAndWait();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -75,7 +97,7 @@ public class SceneManager {
     	        stage.setScene(scenaActual);
     	        stage.show();
         	} else {
-        		scenaActual.setRoot(root);        		
+        		scenaActual.setRoot(root);
         	}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -83,10 +105,10 @@ public class SceneManager {
     }
 
 	private Parent loadFXML(String fxml) throws IOException {
-	    String ruta = "/" + fxml + ".fxml"; 
-	    
+	    String ruta = "/" + fxml + ".fxml";
+
 	    URL url = getClass().getResource(ruta);
-	    
+
 	    if (url == null) {
 	        url = getClass().getResource("/tds/gestiongastos/vista/" + fxml + ".fxml");
 	    }

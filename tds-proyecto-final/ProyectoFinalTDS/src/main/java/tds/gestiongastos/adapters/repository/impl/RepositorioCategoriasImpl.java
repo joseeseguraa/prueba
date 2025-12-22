@@ -15,8 +15,8 @@ import tds.gestiongastos.modelo.impl.CategoriaImpl;
 public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
     private List<CategoriaImpl> categorias = null;
-    private final String RUTA_FICHERO = "src/main/resources/categorias.json";
-
+    private final String RUTA_FICHERO = "categorias.json";
+    
     @Override
     public List<Categoria> getAllCategorias() {
         if (categorias == null) {
@@ -27,7 +27,9 @@ public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
     @Override
     public void addCategoria(Categoria categoria) {
-        if (categorias == null) cargarDatos();
+        if (categorias == null) {
+			cargarDatos();
+		}
 
         if (categoria instanceof CategoriaImpl) {
             categorias.add((CategoriaImpl) categoria);
@@ -37,7 +39,9 @@ public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
     @Override
     public Categoria findByNombre(String nombre) {
-        if (categorias == null) cargarDatos();
+        if (categorias == null) {
+			cargarDatos();
+		}
 
         return categorias.stream()
                 .filter(c -> c.getNombre().equalsIgnoreCase(nombre))
@@ -45,6 +49,21 @@ public class RepositorioCategoriasImpl implements RepositorioCategorias {
                 .orElse(null);
     }
 
+    @Override
+    public void borrarCategoria(Categoria categoria) {
+        if (categorias == null) {
+            cargarDatos();
+        }
+
+        boolean borrado = categorias.remove(categoria);
+        
+        if (borrado) {
+            guardarDatos();
+            System.out.println(">> Categoría '" + categoria.getNombre() + "' eliminada y guardada.");
+        }
+    }
+    
+    
     private void cargarDatos() {
         try {
             File fichero = new File(RUTA_FICHERO);
@@ -64,10 +83,9 @@ public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
     private void iniciarCategoriasPorDefecto() {
         categorias = new ArrayList<>();
-        categorias.add(new CategoriaImpl("Alimentación", "Comida y supermercado"));
-        categorias.add(new CategoriaImpl("Transporte", "Gasolina, bus, tren"));
-        categorias.add(new CategoriaImpl("Ocio", "Cine, cenas, salidas"));
-        categorias.add(new CategoriaImpl("Vivienda", "Alquiler, luz, agua"));
+        categorias.add(new CategoriaImpl("Alimentación"));
+        categorias.add(new CategoriaImpl("Transporte"));
+        categorias.add(new CategoriaImpl("Ocio"));
         guardarDatos();
     }
 

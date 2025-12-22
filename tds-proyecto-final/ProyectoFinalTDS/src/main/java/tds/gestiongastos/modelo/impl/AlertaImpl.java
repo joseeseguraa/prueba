@@ -1,17 +1,18 @@
 package tds.gestiongastos.modelo.impl;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import tds.gestiongastos.modelo.Alerta;
-import tds.gestiongastos.modelo.Categoria;
-import tds.gestiongastos.modelo.TipoCuenta;
-import tds.gestiongastos.modelo.Gasto;
-import tds.gestiongastos.modelo.Notificacion;
-
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import tds.gestiongastos.modelo.Alerta;
+import tds.gestiongastos.modelo.Categoria;
+import tds.gestiongastos.modelo.Gasto;
+import tds.gestiongastos.modelo.Notificacion;
+import tds.gestiongastos.modelo.TipoCuenta;
 
 public class AlertaImpl implements Alerta {
 
@@ -29,7 +30,7 @@ public class AlertaImpl implements Alerta {
 
     @JsonProperty("activa")
     private boolean esActiva;
-    
+
     public AlertaImpl() {
     }
 
@@ -43,26 +44,46 @@ public class AlertaImpl implements Alerta {
 
     @Override
     public String getIdAlerta() {
-        return idAlerta;
+        return this.idAlerta;
     }
 
     @Override
     public String getTipo() {
-        return tipo;
+        return this.tipo;
     }
 
     @Override
     public double getLimite() {
-        return limite;
+        return this.limite;
     }
 
     @Override
-    public Categoria getCategoriaMonitorizada() {
-        return categoria;
+    public Categoria getCategoria() {
+        return this.categoria;
     }
 
-    public boolean isEsActiva() { 
-        return esActiva; 
+    public boolean isEsActiva() {
+        return this.esActiva;
+    }
+
+    public void setIdAlerta(String idAlerta) {
+        this.idAlerta = idAlerta;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setLimite(double limite) {
+        this.limite = limite;
+    }
+    
+    public void setCategoria(CategoriaImpl categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setEsActiva(boolean esActiva) {
+        this.esActiva = esActiva;
     }
     
     public void activar() {
@@ -75,9 +96,7 @@ public class AlertaImpl implements Alerta {
 
     @Override
     public boolean comprobar(Gasto gastoNuevo, TipoCuenta cuenta) {
-        if (!this.esActiva) return false;
-
-        if (!gastoNuevo.getCategoria().getNombre().equals(this.categoria.getNombre())) {
+        if (!this.esActiva || !gastoNuevo.getCategoria().getNombre().equals(this.categoria.getNombre())) {
             return false;
         }
 
@@ -96,9 +115,10 @@ public class AlertaImpl implements Alerta {
         return (totalAcumulado + gastoNuevo.getCantidad()) > this.limite;
     }
 
+    
     @Override
     public Notificacion crearNotificacion() {
-        String mensaje = "Límite " + tipo + " superado en " + categoria.getNombre() + 
+        String mensaje = "Límite " + tipo + " superado en " + categoria.getNombre() +
                          " (Límite: " + limite + ")";
         return new NotificacionImpl(mensaje, LocalDate.now());
     }
@@ -108,14 +128,15 @@ public class AlertaImpl implements Alerta {
         if ("Mensual".equalsIgnoreCase(this.tipo)) {
             return fechaGasto.getMonth() == fechaActual.getMonth() &&
                    fechaGasto.getYear() == fechaActual.getYear();
-        } 
+        }
         else if ("Semanal".equalsIgnoreCase(this.tipo)) {
             WeekFields weekFields = WeekFields.of(Locale.getDefault());
             int semanaGasto = fechaGasto.get(weekFields.weekOfWeekBasedYear());
             int semanaActual = fechaActual.get(weekFields.weekOfWeekBasedYear());
-            return semanaGasto == semanaActual && 
+            return semanaGasto == semanaActual &&
                    fechaGasto.getYear() == fechaActual.getYear();
         }
         return false;
     }
+    
 }

@@ -54,7 +54,7 @@
             <children>
                 <Label styleClass="sidebar-header" text="MENÚ PRINCIPAL" />
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonVolverCuentaPersonal" styleClass="sidebar-btn-active" text="Dashboard" />
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonAlertas" styleClass="sidebar-btn" text="Mis Límites y Alertas" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonVerLimites" styleClass="sidebar-btn" text="Mis Límites y Alertas" />
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonGrafico" styleClass="sidebar-btn" text="Gráficos" />
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCalendario" styleClass="sidebar-btn" text="Calendario" />
 
@@ -63,8 +63,8 @@
                 </Separator>
 
                 <Label styleClass="sidebar-header" text="CONFIGURACIÓN" />
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonAlertas" styleClass="sidebar-btn" text="Crear Alertas" />
-                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCategorias" styleClass="sidebar-btn" text="Crear Categorías" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonNuevaAlerta" styleClass="sidebar-btn" text="Crear o Eliminar Alertas" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCategorias" styleClass="sidebar-btn" text="Crear o Eliminar Categorías" />
             </children>
             <padding><Insets top="20.0" /></padding>
         </VBox>
@@ -88,7 +88,15 @@
 
                         <Button mnemonicParsing="false" onAction="#botonEliminarGasto" styleClass="btn-delete-expense" text="Eliminar Seleccionado" />
 
-                        <Button mnemonicParsing="false" onAction="#abrirVentanaNuevoGasto" styleClass="btn-add-expense" text="+ NUEVO GASTO" />
+						<Button mnemonicParsing="false" onAction="#botonEditarGasto" 
+						        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" 
+						        text="Editar Gasto">
+						    <HBox.margin>
+						        <Insets left="10.0" right="10.0" />
+						    </HBox.margin>
+						</Button>
+						
+						<Button mnemonicParsing="false" onAction="#abrirVentanaNuevoGasto" styleClass="btn-add-expense" text="+ NUEVO GASTO" />
                     </children>
                 </HBox>
 
@@ -123,6 +131,16 @@
                         </VBox>
 
                         <Region HBox.hgrow="ALWAYS" />
+
+						<Button mnemonicParsing="false" onAction="#botonLimpiarFiltros" 
+						        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" 
+						        text="Limpiar" >
+						    <HBox.margin>
+						        <Insets right="10.0" />
+						    </HBox.margin>
+						</Button>
+
+                        
                         <Button mnemonicParsing="false" onAction="#botonAplicarFiltro" styleClass="btn-filter-action" text="Aplicar Filtros" />
                     </children>
                     <padding>
@@ -146,10 +164,11 @@
 
                                 <TableView fx:id="tablaGastos" styleClass="custom-table" VBox.vgrow="ALWAYS">
                                     <columns>
-                                        <TableColumn fx:id="colFecha" prefWidth="119.0" text="Fecha" />
-                                        <TableColumn fx:id="colImporte" prefWidth="118.0" text="Importe" />
-                                        <TableColumn fx:id="colCategoria" prefWidth="186.0" text="Categoría" />
-                                        <TableColumn fx:id="colDescripcion" prefWidth="194.0" text="Concepto" />
+                              <TableColumn fx:id="colId" prefWidth="114.0" text="id" />
+                                        <TableColumn fx:id="colFecha" prefWidth="110.0" text="Fecha" />
+                                        <TableColumn fx:id="colImporte" prefWidth="91.0" text="Importe" />
+                                        <TableColumn fx:id="colCategoria" prefWidth="129.0" text="Categoría" />
+                                        <TableColumn fx:id="colDescripcion" prefWidth="186.0" text="Concepto" />
                                         </columns>
                                         </TableView>
                                     </children>

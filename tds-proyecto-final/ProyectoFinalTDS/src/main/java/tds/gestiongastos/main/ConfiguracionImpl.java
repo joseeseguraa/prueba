@@ -15,15 +15,15 @@ public class ConfiguracionImpl extends Configuracion {
 
     	RepositorioCuentasImpl repoCuentas = new RepositorioCuentasImpl();
         RepositorioCategoriasImpl repoCategorias = new RepositorioCategoriasImpl();
-        
+
         RepositorioGastosImpl repoGastos = new RepositorioGastosImpl(repoCuentas);
-       
-        RepositorioAlertasImpl repoAlertas = new RepositorioAlertasImpl(); 
+
+        RepositorioAlertasImpl repoAlertas = new RepositorioAlertasImpl();
         RepositorioNotificacionesImpl repoNotificaciones = new RepositorioNotificacionesImpl();
 
         this.gestionGastos = new GestionGastos(repoCuentas, repoGastos, repoCategorias, repoAlertas, repoNotificaciones);
     }
-    
+
     @Override
     public GestionGastos getGestionGastos() {
         return gestionGastos;

@@ -1,0 +1,9 @@
+[ {
+  "id" : "951defdb-561d-4d5e-bd9e-69da1a344cf1",
+  "mensaje" : "Límite Semanal superado en Alimentación (Límite: 8.0)",
+  "fecha" : "22/12/2025"
+}, {
+  "id" : "f02fa102-ce78-4e89-9337-beb686260637",
+  "mensaje" : "Límite Mensual superado en Deporte (Límite: 100.0)",
+  "fecha" : "22/12/2025"
+} ]

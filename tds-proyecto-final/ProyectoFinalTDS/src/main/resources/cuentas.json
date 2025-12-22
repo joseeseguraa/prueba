@@ -1,4 +1,13 @@
 [ {
   "nombre" : "Mi Cuenta Personal",
-  "gastos" : [ ]
+  "gastos" : [ {
+    "id" : "403d2e5e-c845-4fc2-a6a3-ad3c2d863f01",
+    "descripcion" : "",
+    "cantidad" : 55555.0,
+    "fecha" : "18/12/2025",
+    "categoria" : {
+      "nombre" : "Ocio",
+      "descripcion" : "Entretenimiento y suscripciones"
+    }
+  } ]
 } ]

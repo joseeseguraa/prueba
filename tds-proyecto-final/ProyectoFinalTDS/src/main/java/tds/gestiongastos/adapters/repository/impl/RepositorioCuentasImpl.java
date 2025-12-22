@@ -17,19 +17,22 @@ import tds.gestiongastos.modelo.impl.TipoCuentaImpl;
 public class RepositorioCuentasImpl implements RepositorioCuentas {
 
 	private List<TipoCuentaImpl> cuentas = null;
-	private final String RUTA_FICHERO = "src/main/resources/cuentas.json";
-
+	//private final String RUTA_FICHERO = "src/main/resources/cuentas.json";
+	private final String RUTA_FICHERO = "cuentas.json";
+	
 	@Override
 	public List<TipoCuenta> getAllCuentas() {
-		if (cuentas == null)
+		if (cuentas == null) {
 			cargarDatos();
+		}
 		return new ArrayList<>(cuentas);
 	}
 
 	@Override
 	public void addCuenta(TipoCuenta cuenta) {
-		if (cuentas == null)
+		if (cuentas == null) {
 			cargarDatos();
+		}
 		if (cuenta instanceof TipoCuentaImpl) {
 			cuentas.add((TipoCuentaImpl) cuenta);
 			guardarDatos();
@@ -38,16 +41,18 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
 
 	@Override
 	public void removeCuenta(TipoCuenta cuenta) {
-		if (cuentas == null)
+		if (cuentas == null) {
 			cargarDatos();
+		}
 		cuentas.remove(cuenta);
 		guardarDatos();
 	}
 
 	@Override
 	public void updateCuenta(TipoCuenta cuenta) {
-		if (cuentas == null)
+		if (cuentas == null) {
 			cargarDatos();
+		}
 
 		guardarDatos();
 	}
@@ -57,7 +62,7 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
 	private void cargarDatos() {
         try {
             File fichero = new File(RUTA_FICHERO);
-            
+
             if (!fichero.exists() || fichero.length() == 0) {
                 iniciarCuentaPorDefecto();
                 return;
@@ -73,7 +78,7 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
             iniciarCuentaPorDefecto();
         }
     }
-    
+
     private void iniciarCuentaPorDefecto() {
         cuentas = new ArrayList<>();
         CuentaPersonalImpl cuentaDefault = new CuentaPersonalImpl("Mi Cuenta Personal");
@@ -91,8 +96,13 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
 
-            mapper.writerWithDefaultPrettyPrinter().writeValue(fichero, cuentas);
+            // CORRECCIÓN: Usamos writerFor con TypeReference para forzar la escritura del campo "tipo"
+            mapper.writerFor(new TypeReference<List<TipoCuentaImpl>>() {})
+                  .withDefaultPrettyPrinter()
+                  .writeValue(fichero, cuentas);
+                  
         } catch (IOException e) {
+            e.printStackTrace(); // Es mejor imprimir la traza para ver el error real
             System.err.println("Error: No se pudieron guardar los datos.");
         }
     }

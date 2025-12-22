@@ -32,7 +32,7 @@ public class EstadisticasVistaControlador {
         // gastos por categoria en el piechart
         Map<String, Double> gastosPorCategoria = Configuracion.getInstancia().getGestionGastos().obtenerGastosPorCategoria();
         ObservableList<PieChart.Data> datosPie = FXCollections.observableArrayList();
-        
+
         gastosPorCategoria.forEach((cat, importe) -> {
             datosPie.add(new PieChart.Data(cat, importe));
         });
@@ -42,11 +42,11 @@ public class EstadisticasVistaControlador {
         Map<String, Double> gastosPorFecha = Configuracion.getInstancia().getGestionGastos().obtenerGastosPorFecha();
         XYChart.Series<String, Number> serie = new XYChart.Series<>();
         serie.setName("Gastos Totales");
-        
+
         gastosPorFecha.forEach((fecha, importe) -> {
             serie.getData().add(new XYChart.Data<>(fecha, importe));
         });
-        
+
         barChartEvolucion.getData().add(serie);
     }
 
