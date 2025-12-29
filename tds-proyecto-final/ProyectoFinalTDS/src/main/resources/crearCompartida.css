@@ -1,6 +1,5 @@
 .form-container {
     -fx-background-color: white;
-    /* Para que parezca que flota*/
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
 }
 
@@ -40,8 +39,6 @@
     -fx-background-radius: 4;
 }
 
-
-/* Botón para añadir categoría (+) */
 .btn-icon-secondary {
     -fx-background-color: #ecf0f1;
     -fx-text-fill: #7f8c8d;
@@ -71,10 +68,36 @@
 
 .btn-cancel {
     -fx-background-color: transparent;
-    -fx-text-fill: #e74c3c; /* Rojo texto */
+    -fx-text-fill: #e74c3c;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
 .btn-cancel:hover {
     -fx-underline: true;
+}
+
+.list-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-background-insets: 0;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-text-fill: #2c3e50;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #f0f3f4;
 }

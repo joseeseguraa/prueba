@@ -3,15 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="1300.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.MainVistaControlador">
+<BorderPane minHeight="500.0" minWidth="500.0" prefHeight="800.0" prefWidth="1300.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.MainVistaControlador">
 
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="65.0" styleClass="top-bar" BorderPane.alignment="CENTER">
@@ -23,23 +21,6 @@
                 </Label>
 
                 <Region HBox.hgrow="ALWAYS" />
-
-                <HBox alignment="CENTER_RIGHT" spacing="15.0">
-                    <children>
-                        <Button mnemonicParsing="false" onAction="#botonImportarDatos" styleClass="btn-importar" text="Importar Datos" />
-
-                        <Button mnemonicParsing="false" onAction="#botonHistorialNotificaciones" styleClass="btn-notificaciones" text="Historial Notificaciones">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
-                                    <image>
-                                        <Image url="@/bellIcon.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-
-                    </children>
-                </HBox>
             </children>
             <padding>
                 <Insets left="20.0" right="20.0" />

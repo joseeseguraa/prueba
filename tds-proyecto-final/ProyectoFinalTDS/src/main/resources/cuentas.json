@@ -1,13 +1,43 @@
 [ {
+  "tipo" : "personal",
   "nombre" : "Mi Cuenta Personal",
-  "gastos" : [ {
-    "id" : "403d2e5e-c845-4fc2-a6a3-ad3c2d863f01",
-    "descripcion" : "",
-    "cantidad" : 55555.0,
-    "fecha" : "18/12/2025",
-    "categoria" : {
-      "nombre" : "Ocio",
-      "descripcion" : "Entretenimiento y suscripciones"
-    }
+  "gastos" : [ ]
+}, {
+  "tipo" : "compartida",
+  "nombre" : "Piso Compartido",
+  "gastos" : [ ],
+  "participantes" : [ {
+    "nombre" : "Yo",
+    "saldo" : -1987.315000000001,
+    "porcentaje" : 25.0
+  }, {
+    "nombre" : "Paco",
+    "saldo" : -7072.705000000003,
+    "porcentaje" : 25.0
+  }, {
+    "nombre" : "Pepe",
+    "saldo" : 16034.494999999995,
+    "porcentaje" : 25.0
+  }, {
+    "nombre" : "Juan",
+    "saldo" : -7385.2350000000015,
+    "porcentaje" : 25.0
+  } ]
+}, {
+  "tipo" : "compartida",
+  "nombre" : "Patata",
+  "gastos" : [ ],
+  "participantes" : [ {
+    "nombre" : "Yo",
+    "saldo" : 0.0,
+    "porcentaje" : 33.333333333333336
+  }, {
+    "nombre" : "Jose",
+    "saldo" : 0.0,
+    "porcentaje" : 33.333333333333336
+  }, {
+    "nombre" : "Hugo",
+    "saldo" : 0.0,
+    "porcentaje" : 33.333333333333336
   } ]
 } ]

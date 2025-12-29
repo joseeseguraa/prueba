@@ -3,14 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" spacing="15.0" styleClass="form-container" stylesheets="@crearCompartida.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.CrearNuevaCompartidaVistaControlador">
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="450.0" spacing="15.0" styleClass="form-container" stylesheets="@crearCompartida.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.CrearCuentaCompartidaControlador">
    <children>
 
       <Label styleClass="form-title" text="Nueva Cuenta Compartida">
@@ -25,17 +27,33 @@
       <VBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
             <Label styleClass="form-label" text="Nombre de la Cuenta *" />
-            <TextField fx:id="txtNombreCuenta" promptText="Ej: Viaje a París, Piso Estudiantes..." styleClass="form-field" />
+            <TextField fx:id="txtNombreCuenta" promptText="Ej: Regalo Cumpleaños" styleClass="form-field" />
+         </children>
+      </VBox>
+      
+      <VBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label styleClass="form-label" text="Tipo de Reparto *" />
+            <HBox spacing="20.0">
+               <children>
+                  <RadioButton fx:id="radioEquitativa" mnemonicParsing="false" selected="true" text="Equitativa">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="grupoDistribucion" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="radioPorcentaje" mnemonicParsing="false" text="Por Porcentaje" toggleGroup="$grupoDistribucion" />
+               </children>
+            </HBox>
          </children>
       </VBox>
 
       <VBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
-            <Label styleClass="form-label" text="Número de Personas *" />
+            <Label styleClass="form-label" text="Número total de participantes (incluido tú) *" />
             <HBox spacing="10.0">
                <children>
-                  <TextField fx:id="txtNumPersonas" prefWidth="80.0" promptText="Ej: 4" styleClass="form-field" />
-                  <Button mnemonicParsing="false" onAction="#generarCamposPersonas" styleClass="btn-icon-secondary" text="Generar Espacios" />
+                  <TextField fx:id="txtNumPersonas" prefWidth="100.0" promptText="Ej: 4" styleClass="form-field" />
+                  <Button mnemonicParsing="false" onAction="#generarCampos" styleClass="btn-icon-secondary" text="Generar Espacios" />
                </children>
             </HBox>
          </children>
@@ -43,21 +61,15 @@
 
       <Label styleClass="form-label" text="Nombres de los integrantes:" />
 
-      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" style="-fx-background-color: transparent; -fx-background: transparent;">
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
          <content>
-            <VBox fx:id="containerIntegrantes" spacing="10.0">
+            <VBox fx:id="containerParticipantes" spacing="10.0">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
-               <children>
-                  <TextField promptText="Nombre Persona 1" styleClass="form-field" />
-                  <TextField promptText="Nombre Persona 2" styleClass="form-field" />
-               </children>
-            </VBox>
+               </VBox>
          </content>
       </ScrollPane>
-
-      <Region VBox.vgrow="ALWAYS" />
 
       <HBox alignment="CENTER" spacing="15.0">
          <children>

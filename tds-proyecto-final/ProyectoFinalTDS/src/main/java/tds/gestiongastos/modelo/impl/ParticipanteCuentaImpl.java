@@ -1,7 +1,6 @@
 package tds.gestiongastos.modelo.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import tds.gestiongastos.modelo.ParticipanteCuenta;
 
 public class ParticipanteCuentaImpl implements ParticipanteCuenta {
@@ -15,7 +14,6 @@ public class ParticipanteCuentaImpl implements ParticipanteCuenta {
 	@JsonProperty("porcentaje")
 	private double porcentajeAsumido;
 
-	// Constructor vacío
 	public ParticipanteCuentaImpl() {
 		this.saldo = 0.0;
 		this.porcentajeAsumido = 0.0;
@@ -24,6 +22,12 @@ public class ParticipanteCuentaImpl implements ParticipanteCuenta {
 	public ParticipanteCuentaImpl(String nombre) {
 		this();
 		this.nombre = nombre;
+	}
+
+	public ParticipanteCuentaImpl(String nombre, double porcentajeAsumido) {
+		this();
+		this.nombre = nombre;
+		this.porcentajeAsumido = porcentajeAsumido;
 	}
 
 	@Override
@@ -49,5 +53,10 @@ public class ParticipanteCuentaImpl implements ParticipanteCuenta {
 	@Override
 	public void setPorcentajeAsumido(double porcentaje) {
 		this.porcentajeAsumido = porcentaje;
+	}
+
+	@Override
+	public String toString() {
+		return nombre + " (" + porcentajeAsumido + "%)";
 	}
 }

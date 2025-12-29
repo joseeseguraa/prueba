@@ -17,8 +17,7 @@ import tds.gestiongastos.modelo.impl.TipoCuentaImpl;
 public class RepositorioCuentasImpl implements RepositorioCuentas {
 
 	private List<TipoCuentaImpl> cuentas = null;
-	//private final String RUTA_FICHERO = "src/main/resources/cuentas.json";
-	private final String RUTA_FICHERO = "cuentas.json";
+	private final String RUTA_FICHERO = "src/main/resources/cuentas.json";
 	
 	@Override
 	public List<TipoCuenta> getAllCuentas() {
@@ -57,8 +56,6 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
 		guardarDatos();
 	}
 
-	//parte persistencia
-
 	private void cargarDatos() {
         try {
             File fichero = new File(RUTA_FICHERO);
@@ -96,13 +93,12 @@ public class RepositorioCuentasImpl implements RepositorioCuentas {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
 
-            // CORRECCIÓN: Usamos writerFor con TypeReference para forzar la escritura del campo "tipo"
             mapper.writerFor(new TypeReference<List<TipoCuentaImpl>>() {})
                   .withDefaultPrettyPrinter()
                   .writeValue(fichero, cuentas);
                   
         } catch (IOException e) {
-            e.printStackTrace(); // Es mejor imprimir la traza para ver el error real
+            e.printStackTrace();
             System.err.println("Error: No se pudieron guardar los datos.");
         }
     }

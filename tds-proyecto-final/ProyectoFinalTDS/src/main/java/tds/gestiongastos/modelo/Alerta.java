@@ -12,4 +12,6 @@ public interface Alerta {
 	String getIdAlerta();
 	
 	Categoria getCategoria();
+	
+	String getNombreCuenta();
 }

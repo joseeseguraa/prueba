@@ -1,12 +1,17 @@
+.root {
+    -fx-font-family: "Segoe UI", Helvetica, sans-serif;
+    -fx-font-size: 14px;
+}
+
 .form-container {
     -fx-background-color: white;
-    /* Para que parezca que flota*/
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-alignment: TOP_CENTER;
 }
 
 .form-title {
     -fx-text-fill: #2c3e50;
     -fx-font-weight: bold;
+    -fx-font-size: 22px;
 }
 
 .form-label {
@@ -21,6 +26,19 @@
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-padding: 5;
+    -fx-font-weight: normal;
+}
+
+.combo-box-base > .label:empty,
+.combo-box-base .list-cell:empty {
+    -fx-text-fill: #95a5a6;
+}
+
+.combo-box-base > .label,
+.combo-box-base .list-cell {
+    -fx-background-color: transparent;
+    -fx-font-weight: normal;
+    -fx-text-fill: #2c3e50;
 }
 
 .form-field-money {
@@ -33,27 +51,30 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-.form-area {
+.list-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
     -fx-background-color: #f9f9f9;
     -fx-border-color: #bdc3c7;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
+    -fx-background-insets: 0;
 }
 
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-text-fill: #2c3e50;
+}
 
-/* Botón para añadir categoría (+) */
-.btn-icon-secondary {
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
     -fx-background-color: #ecf0f1;
-    -fx-text-fill: #7f8c8d;
+    -fx-text-fill: #2c3e50;
     -fx-font-weight: bold;
-    -fx-border-color: #bdc3c7;
-    -fx-border-radius: 4;
-    -fx-cursor: hand;
-    -fx-min-width: 35px;
 }
-.btn-icon-secondary:hover {
-    -fx-background-color: #bdc3c7;
-    -fx-text-fill: white;
+
+.list-cell:filled:hover {
+    -fx-background-color: #f0f3f4;
 }
 
 .btn-save {
@@ -65,16 +86,22 @@
     -fx-padding: 8 20;
     -fx-cursor: hand;
 }
-.btn-save:hover {
-    -fx-background-color: #219150;
-}
 
 .btn-cancel {
     -fx-background-color: transparent;
-    -fx-text-fill: #e74c3c; /* Rojo texto */
+    -fx-text-fill: #e74c3c;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
-.btn-cancel:hover {
-    -fx-underline: true;
+
+/* Efecto Hover en las opciones del ComboBox de Alerta */
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:hover {
+    -fx-background-color: #f0f3f4;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-background-color: #ecf0f1;
+    -fx-font-weight: bold;
 }

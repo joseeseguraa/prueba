@@ -1,17 +1,20 @@
 package tds.gestiongastos.vista;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -19,7 +22,6 @@ import javafx.util.StringConverter;
 import tds.gestiongastos.main.Configuracion;
 import tds.gestiongastos.modelo.Categoria;
 import tds.gestiongastos.modelo.Gasto;
-import tds.gestiongastos.modelo.TipoCuenta;
 
 public class CuentaPersonalVistaControlador {
 
@@ -29,190 +31,224 @@ public class CuentaPersonalVistaControlador {
     @FXML private TableColumn<Gasto, String> colCategoria;
     @FXML private TableColumn<Gasto, String> colDescripcion;
     @FXML private TableColumn<Gasto, Double> colImporte;
-
+    
     @FXML private DatePicker dateDesde;
     @FXML private DatePicker dateHasta;
     @FXML private ComboBox<Categoria> comboCategoriasFiltro;
-
     @FXML private Label lblGastoTotal;
+
+    private static final String SEPARADOR = "--------------------------------------------------";
 
     @FXML
     public void initialize() {
-        System.out.println("Inicializando tabla de gastos...");
-
+        System.out.println("Inicializando Vista Cuenta Personal...");
+        
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         colImporte.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        colCategoria.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getCategoria().getNombre()));
+        
+        colCategoria.setCellValueFactory(cellData -> {
+            String nombreInterno = cellData.getValue().getCategoria().getNombre();
+            int index = nombreInterno.indexOf("_");
+            return new SimpleStringProperty((index != -1) ? nombreInterno.substring(index + 1) : nombreInterno);
+        });
 
+        tablaGastos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tablaGastos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+        
         cargarCategoriasEnCombo();
         cargarDatosTabla(null);
+        System.out.println(SEPARADOR);
     }
-
 
     private void cargarCategoriasEnCombo() {
         List<Categoria> categorias = Configuracion.getInstancia().getGestionGastos().getTodasCategorias();
         comboCategoriasFiltro.setItems(FXCollections.observableArrayList(categorias));
 
+        comboCategoriasFiltro.setButtonCell(new ListCell<Categoria>() {
+            @Override
+            protected void updateItem(Categoria item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Todas");
+                } else {
+                    String nombre = item.getNombre();
+                    int index = nombre.indexOf("_");
+                    setText((index != -1) ? nombre.substring(index + 1) : nombre);
+                }
+            }
+        });
+        
+        comboCategoriasFiltro.setCellFactory(lv -> new ListCell<Categoria>() {
+            @Override
+            protected void updateItem(Categoria item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Todas");
+                } else {
+                    String nombre = item.getNombre();
+                    int index = nombre.indexOf("_");
+                    setText((index != -1) ? nombre.substring(index + 1) : nombre);
+                }
+            }
+        });
+
         comboCategoriasFiltro.setConverter(new StringConverter<Categoria>() {
             @Override
             public String toString(Categoria c) {
-                return c == null ? null : c.getNombre();
+                if (c == null) return "Todas";
+                String nombre = c.getNombre();
+                int index = nombre.indexOf("_");
+                return (index != -1) ? nombre.substring(index + 1) : nombre;
             }
-            
-            //TODO Hay que implementar el fromString 
             @Override
-            public Categoria fromString(String string) {
-                return null;
-            }
+            public Categoria fromString(String string) { return null; }
         });
     }
 
-    
     private void cargarDatosTabla(List<Gasto> datosFiltrados) {
-        TipoCuenta cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
-
-        ObservableList<Gasto> lista;
-        if (datosFiltrados != null) {
-            lista = FXCollections.observableArrayList(datosFiltrados);
-        } else if (cuenta != null) {
-            lista = FXCollections.observableArrayList(cuenta.getGastos());
-        } else {
-            lista = FXCollections.observableArrayList();
-        }
+        var cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
+        var lista = (datosFiltrados != null) 
+            ? FXCollections.observableArrayList(datosFiltrados) 
+            : (cuenta != null ? FXCollections.observableArrayList(cuenta.getGastos()) : FXCollections.<Gasto>observableArrayList());
+            
         tablaGastos.setItems(lista);
-
         actualizarEtiquetaTotal(lista);
     }
 
     private void actualizarEtiquetaTotal(List<Gasto> listaGastos) {
         if (lblGastoTotal != null) {
-            double total = listaGastos.stream()
-                                      .mapToDouble(Gasto::getCantidad)
-                                      .sum();
-
+            double total = listaGastos.stream().mapToDouble(Gasto::getCantidad).sum();
             lblGastoTotal.setText(String.format("%.2f €", total));
         }
     }
 
-    @FXML
-    public void botonVolver(ActionEvent event) {
-        Configuracion.getInstancia().getSceneManager().showVentanaPrincipal();
+    @FXML public void botonVolver(ActionEvent event) {
+        System.out.println(">>> Acción: Volver al menú principal");
+        System.out.println(SEPARADOR);
+        Configuracion.getInstancia().getSceneManager().showVentanaPrincipal(); 
     }
 
-    @FXML
-    public void abrirVentanaNuevoGasto(ActionEvent event) {
-    	System.out.println("Abriendo formulario para crear nuevo gasto...");
+    @FXML public void abrirVentanaNuevoGasto(ActionEvent event) {
+        System.out.println(">>> Acción: Abrir ventana de nuevo gasto");
+        System.out.println(SEPARADOR);
         Configuracion.getInstancia().getSceneManager().showNuevoGasto();
         cargarDatosTabla(null);
         cargarCategoriasEnCombo();
     }
 
-
-    @FXML
-    public void botonEliminarGasto(ActionEvent event) {
-        Gasto seleccionado = tablaGastos.getSelectionModel().getSelectedItem();
-        if (seleccionado != null) {
-        	System.out.println("Eliminando gasto seleccionado: " + seleccionado.getDescripcion() + " (" + seleccionado.getCantidad() + "€)");
-            Configuracion.getInstancia().getGestionGastos().borrarGasto(seleccionado);
+    @FXML public void botonEliminarGasto(ActionEvent event) {
+        System.out.println(">>> Acción: Click en Eliminar Gasto");
+        var seleccionados = tablaGastos.getSelectionModel().getSelectedItems();
+        if (seleccionados.isEmpty()) {
+            mostrarAviso("Atención", "Selecciona al menos un gasto para eliminar.");
+            System.out.println(SEPARADOR);
+            return;
+        }
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar eliminación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Eliminar los " + seleccionados.size() + " gastos seleccionados?");
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            System.out.println("Confirmada eliminación de " + seleccionados.size() + " gastos.");
+            Configuracion.getInstancia().getGestionGastos().borrarGastos(new ArrayList<>(seleccionados));
             cargarDatosTabla(null);
         } else {
-        	System.out.println("Intento de eliminar sin seleccionar nada.");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Atención");
-            alert.setContentText("Selecciona un gasto para eliminar.");
-            alert.showAndWait();
+            System.out.println("Eliminación cancelada.");
         }
+        System.out.println(SEPARADOR);
     }
 
-
-    @FXML
-    public void botonAplicarFiltro(ActionEvent event) {
-        LocalDate inicio = dateDesde.getValue();
-        LocalDate fin = dateHasta.getValue();
-        Categoria cat = comboCategoriasFiltro.getValue();
-
-        String fInicio = "Cualquiera";
-        if (inicio != null) {
-            fInicio = inicio.toString();
-        }
-
-        String fFin = "Cualquiera";
-        if (fin != null) {
-            fFin = fin.toString();
-        }
-
-        String nombreCat = "Todas";
-        if (cat != null) {
-            nombreCat = cat.getNombre();
-        }
-
-        System.out.println("Aplicando filtro -> Desde: " + fInicio + " | Hasta: " + fFin + " | Categoría: " + nombreCat);
-        
-        List<Gasto> filtrados = Configuracion.getInstancia().getGestionGastos().filtrarGastos(inicio, fin, cat);
+    @FXML public void botonAplicarFiltro(ActionEvent event) {
+        System.out.println(">>> Acción: Aplicar filtros de búsqueda");
+        List<Gasto> filtrados = Configuracion.getInstancia().getGestionGastos().filtrarGastos(dateDesde.getValue(), dateHasta.getValue(), comboCategoriasFiltro.getValue(), null);
         cargarDatosTabla(filtrados);
+        System.out.println(SEPARADOR);
     }
     
-    @FXML
-    public void botonLimpiarFiltros(ActionEvent event) {
-    	System.out.println("Limpiando filtros: Mostrando todos los gastos.");
-    	
+    @FXML public void botonLimpiarFiltros(ActionEvent event) {
+        System.out.println(">>> Acción: Limpiar filtros");
         dateDesde.setValue(null);
         dateHasta.setValue(null);
         comboCategoriasFiltro.getSelectionModel().clearSelection(); 
         comboCategoriasFiltro.setValue(null);
-        
         cargarDatosTabla(null);
+        System.out.println(SEPARADOR);
     }
     
-    
-    @FXML 
-    public void botonEditarGasto(ActionEvent event) {
-        Gasto seleccionado = tablaGastos.getSelectionModel().getSelectedItem();
-        
-        if (seleccionado != null) {
-        	System.out.println("Editando gasto: " + seleccionado.getDescripcion());
-            Configuracion.getInstancia().getSceneManager().showEditarGasto(seleccionado);
-            
-            cargarDatosTabla(null);
-            
-        } else {
-        	System.out.println("No se ha seleccionado ningún gasto para editar.");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Atención");
-            alert.setContentText("Selecciona un gasto de la tabla para editar.");
-            alert.showAndWait();
+    @FXML public void botonEditarGasto(ActionEvent event) {
+        System.out.println(">>> Acción: Click en Editar Gasto");
+        var seleccionados = tablaGastos.getSelectionModel().getSelectedItems();
+
+        if (seleccionados.isEmpty()) {
+            mostrarAviso("Atención", "Por favor, selecciona un gasto de la lista para editar.");
+            System.out.println(SEPARADOR);
+            return;
         }
-    }
-    
-    
-    @FXML 
-    public void botonCategorias(ActionEvent event) {
-    	System.out.println("Navegando a: Gestión de Categorías");
-    	Configuracion.getInstancia().getSceneManager().showNuevaCategoria();
-    	cargarCategoriasEnCombo();
-    	
+
+        if (seleccionados.size() > 1) {
+            mostrarAviso("Selección Múltiple", "Has seleccionado " + seleccionados.size() + " gastos.\nLa edición solo permite modificar los gastos de uno en uno.");
+            System.out.println(SEPARADOR);
+            return;
+        }
+
+        Gasto gastoAEditar = seleccionados.get(0);
+        System.out.println("Abriendo editor para: " + gastoAEditar.getDescripcion());
+        Configuracion.getInstancia().getSceneManager().showEditarGasto(gastoAEditar);
+        cargarDatosTabla(null);
+        System.out.println(SEPARADOR);
     }
 
-    
-    @FXML 
-    public void botonNuevaAlerta(ActionEvent event) {
-    	System.out.println("Navegando a: Crear Nueva Alerta");
-    	Configuracion.getInstancia().getSceneManager().showNuevaAlerta();
+    @FXML public void botonCategorias(ActionEvent event) {
+        System.out.println(">>> Acción: Gestionar Categorías");
+        System.out.println(SEPARADOR);
+        Configuracion.getInstancia().getSceneManager().showNuevaCategoria();
+        cargarCategoriasEnCombo();
     }
 
-    @FXML
-    public void botonVerLimites(ActionEvent event) {
-    	System.out.println("Navegando a: Estado de Límites");
-    	Configuracion.getInstancia().getSceneManager().showEstadoLimites();
+    @FXML public void botonNuevaAlerta(ActionEvent event) { 
+        System.out.println(">>> Acción: Gestionar Alertas");
+        System.out.println(SEPARADOR);
+        Configuracion.getInstancia().getSceneManager().showNuevaAlerta(); 
     }
     
+    @FXML public void botonVerLimites(ActionEvent event) { 
+        System.out.println(">>> Acción: Ver Estado Límites");
+        System.out.println(SEPARADOR);
+        Configuracion.getInstancia().getSceneManager().showEstadoLimites(); 
+    }
     
-    @FXML public void botonImportarDatos(ActionEvent event) {}
-    @FXML public void botonHistorialNotificaciones(ActionEvent event) {}
-    @FXML public void botonVolverCuentaPersonal(ActionEvent event) {}
-    @FXML public void botonGrafico(ActionEvent event) {}
-    @FXML public void botonCalendario(ActionEvent event) {}
+    @FXML public void botonHistorialNotificaciones(ActionEvent event) { 
+        System.out.println(">>> Acción: Historial Notificaciones");
+        System.out.println(SEPARADOR);
+        Configuracion.getInstancia().getSceneManager().showHistorialNotificaciones(); 
+    }
+    
+    @FXML public void botonImportarDatos(ActionEvent event) {
+        System.out.println(">>> Acción: Importar Gastos");
+        System.out.println(SEPARADOR);
+        Configuracion.getInstancia().getSceneManager().showImportarGastos();
+        cargarDatosTabla(null);
+        cargarCategoriasEnCombo();
+    }
+
+    @FXML public void botonGrafico(ActionEvent event) {
+        System.out.println(">>> Acción: Ver Gráficas (Botón pulsado)");
+        mostrarAviso("Información", "Funcionalidad de gráficas en construcción.");
+        System.out.println(SEPARADOR);
+    }
+    
+    @FXML public void botonCalendario(ActionEvent event) {
+        System.out.println(">>> Acción: Ver Calendario (Botón pulsado)");
+        Configuracion.getInstancia().getSceneManager().showCalendario();
+        System.out.println(SEPARADOR);
+    }
+
+    private void mostrarAviso(String titulo, String msg) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }

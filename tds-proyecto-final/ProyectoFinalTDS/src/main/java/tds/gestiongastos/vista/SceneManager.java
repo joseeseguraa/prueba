@@ -6,7 +6,7 @@ import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Dialog;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tds.gestiongastos.modelo.Gasto;
@@ -32,6 +32,14 @@ public class SceneManager {
     	cargarYMostarDialogo("crearCompartida", "Nueva Cuenta Compartida");
     }
 
+    public void showSeleccionarCompartida() {
+    	cargarYMostarDialogo("seleccionarCompartida", "Seleccionar Cuenta");
+    }
+    
+    public void showCuentaCompartida() {
+    	cargarYMostar("cuenta_compartida");
+    }
+    
     public void showNuevoGasto() {
     	cargarYMostarDialogo("nuevo_gasto", "Registrar Nuevo Gasto");
     }
@@ -51,7 +59,16 @@ public class SceneManager {
     public void showCalendario() {
     	cargarYMostarDialogo("calendario", "Abrir Calendario");
     }
+    
+    public void showHistorialNotificaciones() {
+        cargarYMostarDialogo("historial_notificaciones", "Historial de Alertas");
+    }
+    
+    public void showImportarGastos() {
+        cargarYMostarDialogo("importar_gastos", "Importar Gastos");
+    }
 
+    
     public void showEditarGasto(Gasto gastoAEditar) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/nuevo_gasto.fxml"));
@@ -60,11 +77,14 @@ public class SceneManager {
             GastoVistaControlador controller = loader.getController();
             controller.setGasto(gastoAEditar);
             
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setTitle("Editar Gasto");
-            dialog.initStyle(StageStyle.UTILITY);
-            dialog.getDialogPane().setContent(root);
-            dialog.showAndWait();
+            Stage stage = new Stage();
+            stage.setTitle("Editar Gasto");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            
+            stage.setResizable(false);
+            stage.sizeToScene(); 
+            stage.showAndWait(); 
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,15 +93,24 @@ public class SceneManager {
 
     private void cargarYMostarDialogo(String fxml, String titulo) {
         try {
-            Parent root = loadFXML(fxml);
+        	Parent root = loadFXML(fxml);
 
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setTitle(titulo);
-            dialog.initStyle(StageStyle.UTILITY);
+            Scene scene = new Scene(root);
 
-            dialog.getDialogPane().setContent(root);
+            Stage stage = new Stage(StageStyle.UTILITY);
+            stage.setTitle(titulo);
+            stage.setScene(scene);
+            stage.initOwner(this.stage);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(true);
 
-            dialog.showAndWait();
+            stage.setOnShown(e -> {
+                stage.sizeToScene();              
+                stage.setMinWidth(stage.getWidth());
+                stage.setMinHeight(stage.getHeight());
+            });
+
+            stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,9 +122,19 @@ public class SceneManager {
         try {
         	Parent root = loadFXML(fxml);
         	if (scenaActual == null) {
-    			scenaActual = new Scene(root);
-    	        stage.setScene(scenaActual);
-    	        stage.show();
+                scenaActual = new Scene(root);
+                stage.setScene(scenaActual);
+                stage.initStyle(StageStyle.DECORATED);
+                stage.setResizable(true);
+
+                stage.setOnShown(e -> {
+                    stage.sizeToScene();
+                    stage.setMinWidth(1100);
+                    stage.setMinHeight(700);
+                });
+
+                stage.show();
+                
         	} else {
         		scenaActual.setRoot(root);
         	}

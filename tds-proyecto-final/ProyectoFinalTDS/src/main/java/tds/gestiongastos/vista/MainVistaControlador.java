@@ -4,8 +4,11 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import tds.gestiongastos.controlador.GestionGastos;
 import tds.gestiongastos.main.Configuracion;
+import tds.gestiongastos.modelo.CuentaCompartida;
 import tds.gestiongastos.modelo.TipoCuenta;
 import tds.gestiongastos.modelo.impl.CuentaPersonalImpl;
 
@@ -16,15 +19,6 @@ public class MainVistaControlador {
         System.out.println("Vista Principal cargada correctamente.");
     }
 
-    @FXML
-    public void botonImportarDatos(ActionEvent event) {
-        System.out.println("Click en Importar Datos");
-    }
-
-    @FXML
-    public void botonHistorialNotificaciones(ActionEvent event) {
-        System.out.println("Click en Historial");
-    }
 
     @FXML
     public void botonAccederPersonal(ActionEvent event) {
@@ -52,14 +46,24 @@ public class MainVistaControlador {
 
     @FXML
     public void botonAccederCompartidas(ActionEvent event) {
-        System.out.println("Accediendo a Cuentas Compartidas...");
+        GestionGastos gestion = Configuracion.getInstancia().getGestionGastos();
+        
+        boolean hayCompartidas = gestion.getCuentasDisponibles().stream()
+                .anyMatch(c -> c instanceof CuentaCompartida);
+        
+        if (!hayCompartidas) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Sin Cuentas Compartidas");
+            alert.setHeaderText(null);
+            alert.setContentText("No existe ninguna cuenta compartida.\nPulsa 'Crear Cuenta Compartida' para empezar.");
+            alert.showAndWait();
+        } else {
+            Configuracion.getInstancia().getSceneManager().showSeleccionarCompartida();
+        }
     }
 
     @FXML
     public void botonCrearCompartida(ActionEvent event) {
-        System.out.println("Crear nueva cuenta compartida...");
-
-
-        System.out.println("TODO: Implementar showCrearCuentaCompartida en SceneManager");
+        Configuracion.getInstancia().getSceneManager().showCrearCuentaCompartida();
     }
 }

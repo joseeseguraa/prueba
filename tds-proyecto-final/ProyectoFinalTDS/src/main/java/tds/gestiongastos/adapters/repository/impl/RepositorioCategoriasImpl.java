@@ -15,7 +15,7 @@ import tds.gestiongastos.modelo.impl.CategoriaImpl;
 public class RepositorioCategoriasImpl implements RepositorioCategorias {
 
     private List<CategoriaImpl> categorias = null;
-    private final String RUTA_FICHERO = "categorias.json";
+    private final String RUTA_FICHERO = "src/main/resources/categorias.json";
     
     @Override
     public List<Categoria> getAllCategorias() {

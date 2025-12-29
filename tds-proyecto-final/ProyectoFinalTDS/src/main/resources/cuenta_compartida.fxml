@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="500.0" minWidth="500.0" prefHeight="800.0" prefWidth="1300.0" stylesheets="@cuenta_personal.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.CuentaPersonalVistaControlador">
+<BorderPane minHeight="500.0" minWidth="500.0" prefHeight="800.0" prefWidth="1300.0" stylesheets="@cuenta_personal.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.CuentasCompartidasVistaControlador">
 
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="65.0" styleClass="top-bar" BorderPane.alignment="CENTER">
@@ -24,7 +24,7 @@
                 <Button mnemonicParsing="false" onAction="#botonVolver" styleClass="btn-icon" text="⬅">
                     <HBox.margin><Insets right="10.0" /></HBox.margin>
                 </Button>
-                <Label styleClass="header-title" text="Mi Cuenta Personal">
+                <Label styleClass="header-title" text="Mi Cuenta Compartida">
                     <font><Font name="System Bold" size="24.0" /></font>
                 </Label>
                 <Region HBox.hgrow="ALWAYS" />
@@ -127,6 +127,11 @@
                             <Label styleClass="filter-label" text="Categoría" />
                             <ComboBox fx:id="comboCategoriasFiltro" prefWidth="130.0" promptText="Todas" />
                         </VBox>
+                        
+                        <VBox spacing="2.0">
+    						<Label styleClass="filter-label" text="Pagador" />
+						    <ComboBox fx:id="comboFiltroUsuario" prefWidth="130.0" promptText="Todos" />
+						</VBox>
 
                         <Region HBox.hgrow="ALWAYS" />
 
@@ -160,6 +165,7 @@
                                 <TableView fx:id="tablaGastos" styleClass="custom-table" VBox.vgrow="ALWAYS">
                                     <columns>
                               <TableColumn fx:id="colId" prefWidth="114.0" text="id" />
+                              			<TableColumn fx:id="colUsuario" prefWidth="120.0" text="Pagado por" />
                                         <TableColumn fx:id="colFecha" prefWidth="110.0" text="Fecha" />
                                         <TableColumn fx:id="colImporte" prefWidth="91.0" text="Importe" />
                                         <TableColumn fx:id="colCategoria" prefWidth="129.0" text="Categoría" />

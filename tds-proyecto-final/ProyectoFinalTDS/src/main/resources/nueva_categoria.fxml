@@ -6,52 +6,89 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="400.0" spacing="10.0" 
-      styleClass="form-container" stylesheets="@gasto.css" 
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+<VBox alignment="TOP_CENTER"
+      minWidth="400.0"
+      minHeight="450.0"
+      prefWidth="400.0"
+      prefHeight="475.0"
+      maxWidth="600.0"
+      maxHeight="800.0"
+      spacing="10.0"
+      styleClass="form-container"
+      stylesheets="@nueva_alerta.css"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="tds.gestiongastos.vista.CategoriaVistaControlador">
 
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
+    <children>
 
-   <children>
-      <Label styleClass="form-title" text="Gestión de Categorías">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
+        <Label styleClass="form-title" text="Gestión de Categorías">
+            <VBox.margin>
+                <Insets top="5.0"/>
+            </VBox.margin>
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+            <VBox.margin>
+            	<Insets bottom="10.0" />
+         	</VBox.margin>
+        </Label>
 
-      <Label text="Categorías existentes:" styleClass="form-label" alignment="CENTER_LEFT" maxWidth="Infinity"/>
-      
-      <ListView fx:id="listaCategorias" VBox.vgrow="ALWAYS" 
-                style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-border-color: #cccccc;" />
+        <VBox spacing="5.0">
+            <Label text="Categorías existentes:" styleClass="form-label"/>
 
-      <HBox alignment="CENTER_RIGHT" spacing="10.0">
-          <Button mnemonicParsing="false" text="Eliminar Seleccionada" onAction="#eliminarCategoria" 
-                  styleClass="btn-save" 
-                  style="-fx-background-color: #e74c3c;" />
-      </HBox>
+            <ListView fx:id="listaCategorias"
+                      minHeight="120.0"
+                      style="-fx-focus-color: transparent;
+                             -fx-faint-focus-color: transparent;
+                             -fx-border-color: #cccccc;"/>
 
-      <Region prefHeight="10.0" />
+            <Button text="Eliminar Seleccionada"
+                    onAction="#eliminarCategoria"
+                    styleClass="btn-save"
+                    style="-fx-background-color: #e74c3c;"
+                    maxWidth="Infinity">
+                <VBox.margin>
+                    <Insets top="5.0"/>
+                </VBox.margin>
+            </Button>
+        </VBox>
 
-      <Label text="Crear nueva:" styleClass="form-label" alignment="CENTER_LEFT" maxWidth="Infinity"/>
-      
-      <HBox spacing="10.0" alignment="CENTER_LEFT">
-         <children>
-            <TextField fx:id="txtNombreCategoria" promptText="Nombre nueva categoria" HBox.hgrow="ALWAYS" styleClass="form-field" />
-            
-            <Button mnemonicParsing="false" onAction="#guardarCategoria" styleClass="btn-save" text="➕ Añadir" />
-         </children>
-      </HBox>
+        <Label text="Crear nueva:" styleClass="form-label" style="-fx-font-weight: bold;">
+            <VBox.margin>
+                <Insets top="10.0"/>
+            </VBox.margin>
+        </Label>
 
-      <Region prefHeight="10.0" />
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <TextField fx:id="txtNombreCategoria"
+                       promptText="Nombre nueva categoría"
+                       HBox.hgrow="ALWAYS"
+                       styleClass="form-field"/>
 
-      <Button mnemonicParsing="false" onAction="#cancelarCategoria" styleClass="btn-cancel" text="Cerrar Ventana" maxWidth="Infinity" />
+            <Button text="➕ Añadir"
+                    onAction="#guardarCategoria"
+                    styleClass="btn-save"/>
+        </HBox>
 
-   </children>
+        <HBox alignment="CENTER">
+            <VBox.margin>
+                <Insets top="15.0"/>
+            </VBox.margin>
+
+            <Button text="Cerrar Ventana"
+                    onAction="#cancelarCategoria"
+                    styleClass="btn-cancel"
+                    maxWidth="Infinity"/>
+        </HBox>
+
+    </children>
+
+    <padding>
+        <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
+    </padding>
+
 </VBox>

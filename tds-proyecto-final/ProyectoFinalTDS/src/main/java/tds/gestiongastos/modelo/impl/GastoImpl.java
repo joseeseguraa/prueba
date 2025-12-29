@@ -29,28 +29,36 @@ public class GastoImpl implements Gasto {
     @JsonDeserialize(as = CategoriaImpl.class)
     private CategoriaImpl categoria;
 
+    @JsonProperty("pagador")
+    private String pagador;
+    
     public GastoImpl() {
         this.id = UUID.randomUUID().toString().substring(0, 8);
+        this.pagador = "Yo";
     }
 
     public GastoImpl(String descripcion, double cantidad, LocalDate fecha, CategoriaImpl categoria) {
+        this(descripcion, cantidad, fecha, categoria, "Yo");
+    }
+    
+    public GastoImpl(String descripcion, double cantidad, LocalDate fecha, CategoriaImpl categoria, String pagador) {
         this.id = UUID.randomUUID().toString().substring(0, 8);
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.fecha = fecha;
         this.categoria = categoria;
+        this.pagador = pagador;
     }
 
     @Override public String getId() { return id; }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     @Override public String getDescripcion() { return descripcion; }
     @Override public double getCantidad() { return cantidad; }
     @Override public LocalDate getFecha() { return fecha; }
     @Override public Categoria getCategoria() { return categoria; }
+    
+    @Override public String getPagador() { return pagador; }
 
     @Override public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
     @Override public void setCantidad(double cantidad) { this.cantidad = cantidad; }
@@ -61,5 +69,10 @@ public class GastoImpl implements Gasto {
         if (categoria instanceof CategoriaImpl) {
             this.categoria = (CategoriaImpl) categoria;
         }
+    }
+
+    @Override 
+    public void setPagador(String pagador) { 
+        this.pagador = pagador; 
     }
 }

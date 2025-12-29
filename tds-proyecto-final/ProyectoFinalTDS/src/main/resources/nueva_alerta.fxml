@@ -13,40 +13,41 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
-      prefHeight="550.0" prefWidth="400.0" spacing="10.0" styleClass="form-container" stylesheets="@nueva_alerta.css" 
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tds.gestiongastos.vista.AlertaVistaControlador">
+<VBox alignment="TOP_CENTER" maxHeight="800.0" maxWidth="600.0" minHeight="650.0" minWidth="400.0" prefHeight="650.0" prefWidth="400.0" spacing="10.0" styleClass="form-container" stylesheets="@nueva_alerta.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tds.gestiongastos.vista.AlertaVistaControlador">
 
    <children>
-      <Label text="Crear Nueva Alerta">
+      <Label styleClass="form-title" text="Crear Nueva Alerta">
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets top="50.0" />
          </VBox.margin>
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
       </Label>
 
       <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-          <Label text="Alertas Activas:" styleClass="form-label"/>
+          <Label styleClass="form-label" text="Alertas Activas:" />
           
-          <ListView fx:id="listaAlertas" prefHeight="120.0" maxWidth="Infinity" 
-                    style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-border-color: #cccccc;" />
+          <ListView fx:id="listaAlertas" maxWidth="Infinity" minHeight="100.0" prefHeight="200.0" styleClass="list-view" VBox.vgrow="ALWAYS" />
           
-          <Button text="Eliminar Seleccionada" onAction="#eliminarAlerta" 
-                  styleClass="btn-save" 
-                  style="-fx-background-color: #e74c3c;" 
-                  maxWidth="Infinity">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
-          </Button>
+          <HBox spacing="10.0">
+             <children>
+                <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#botonEditarAlerta" styleClass="btn-save" style="-fx-background-color: #3498db;" text="Editar" HBox.hgrow="ALWAYS" />
+                
+                <Button maxWidth="Infinity" onAction="#eliminarAlerta" styleClass="btn-save" style="-fx-background-color: #e74c3c;" text="Eliminar" HBox.hgrow="ALWAYS" />
+             </children>
+             <VBox.margin>
+                <Insets top="5.0" />
+             </VBox.margin>
+          </HBox>
       </VBox>
 
       <Region prefHeight="10.0" />
       
-      <Label text="Nueva Configuración:" styleClass="form-label" style="-fx-font-weight: bold;"/>
+      <Label style="-fx-font-weight: bold;" styleClass="form-label" text="Nueva Configuración:" />
 
       <VBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
@@ -80,7 +81,8 @@
                         <String fx:value="combo-box-base" />
                      </styleClass>
                   </ComboBox>
-                  <Button mnemonicParsing="false" onAction="#botonCategorias" styleClass="btn-icon-secondary" text="+">
+                  
+                  <Button fx:id="btnNuevaCategoria" mnemonicParsing="false" onAction="#botonCategorias" styleClass="btn-icon-secondary" text="+">
                      <tooltip>
                         <Tooltip text="Crear nueva categoría" />
                      </tooltip>
@@ -92,13 +94,9 @@
 
       <HBox alignment="CENTER" spacing="15.0">
          <children>
-            <Button fx:id="CancelarNo" mnemonicParsing="false" onAction="#cancelarRegistro" styleClass="btn-cancel" text="Cerrar">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
+            <Button fx:id="CancelarNo" mnemonicParsing="false" onAction="#cancelarRegistro" styleClass="btn-cancel" text="Cerrar" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="GuardarAlertaButton" mnemonicParsing="false" onAction="#guardarAlerta" styleClass="btn-save" text="Guardar Alerta" />
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarAlerta" styleClass="btn-save" text="Guardar Alerta" />
          </children>
          <VBox.margin>
             <Insets top="10.0" />
@@ -107,6 +105,6 @@
    </children>
    
    <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>
 </VBox>

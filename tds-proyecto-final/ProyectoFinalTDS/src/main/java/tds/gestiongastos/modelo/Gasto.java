@@ -12,6 +12,8 @@ public interface Gasto {
 	LocalDate getFecha();
 
 	Categoria getCategoria();
+	
+	String getPagador();
 
 	void setDescripcion(String descripcion);
 
@@ -20,4 +22,6 @@ public interface Gasto {
 	void setFecha(LocalDate fecha);
 
 	void setCategoria(Categoria categoria);
+	
+	void setPagador(String pagador);
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="450.0" spacing="15.0" 
+<VBox alignment="TOP_CENTER" minWidth="400.0" minHeight="450.0" maxWidth="600.0" maxHeight="800.0" prefHeight="475.0" prefWidth="400.0" spacing="15.0" 
       styleClass="form-container" stylesheets="@nueva_alerta.css" 
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="tds.gestiongastos.vista.LimitesVistaControlador">
@@ -19,14 +19,14 @@
    </padding>
 
    <children>
-      <Label text="Estado de mis Límites y Alertas">
+      <Label styleClass="form-title" text="Estado de mis Límites y Alertas">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
 
       <VBox spacing="5.0">
-         <Label text="Filtrar alertas por:" style="-fx-font-weight: bold;"/>
+         <Label text="Filtrar alertas por:" styleClass="form-label"/>
          
          <HBox alignment="CENTER_LEFT" spacing="10.0">
             <children>
@@ -48,6 +48,6 @@
       <ListView fx:id="listaProgreso" VBox.vgrow="ALWAYS" 
                 style="-fx-background-color: transparent; -fx-border-color: #cccccc;"/>
 
-      <Button text="Cerrar" onAction="#cerrar" styleClass="btn-cancel" maxWidth="Infinity"/>
+      <Button text="Cerrar Ventana" onAction="#cerrar" styleClass="btn-cancel" maxWidth="Infinity"/>
    </children>
 </VBox>

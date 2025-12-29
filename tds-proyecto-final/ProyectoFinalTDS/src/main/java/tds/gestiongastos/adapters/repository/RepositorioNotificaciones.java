@@ -9,4 +9,6 @@ public interface RepositorioNotificaciones {
     List<Notificacion> getAllNotificaciones();
 
     void addNotificacion(Notificacion notificacion);
+    
+    void removeNotificacion(Notificacion notificacion);
 }

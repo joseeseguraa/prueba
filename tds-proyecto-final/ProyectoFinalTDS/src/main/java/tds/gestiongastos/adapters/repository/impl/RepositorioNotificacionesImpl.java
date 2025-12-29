@@ -3,7 +3,6 @@ package tds.gestiongastos.adapters.repository.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -33,8 +32,15 @@ public class RepositorioNotificacionesImpl implements RepositorioNotificaciones 
     }
 
     @Override
+    public void removeNotificacion(Notificacion notificacion) {
+        if (this.notificaciones.remove(notificacion)) {
+            guardarDatos();
+        }
+    }
+    
+    @Override
     public List<Notificacion> getAllNotificaciones() {
-        return Collections.unmodifiableList(notificaciones);
+        return new ArrayList<>(notificaciones);
     }
 
 
@@ -42,6 +48,12 @@ public class RepositorioNotificacionesImpl implements RepositorioNotificaciones 
         try {
             File fichero = new File(RUTA_FICHERO);
             if (!fichero.exists()) {
+                fichero.createNewFile();
+                notificaciones = new ArrayList<>();
+                return;
+            }
+            
+            if (fichero.length() == 0) {
                 notificaciones = new ArrayList<>();
                 return;
             }

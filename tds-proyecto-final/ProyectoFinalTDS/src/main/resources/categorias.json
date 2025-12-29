@@ -1,16 +1,37 @@
 [ {
-  "nombre" : "Alimentación",
-  "descripcion" : "Comida y bebida"
+  "nombre" : "Alimentación"
 }, {
-  "nombre" : "Ocio",
-  "descripcion" : "Entretenimiento y suscripciones"
+  "nombre" : "Transporte"
 }, {
-  "nombre" : "Transporte",
-  "descripcion" : "Gasolina y transporte público"
+  "nombre" : "Ocio"
 }, {
-  "nombre" : "bjj",
-  "descripcion" : "Descripción por defecto"
+  "nombre" : "Comida"
 }, {
-  "nombre" : "vghv",
-  "descripcion" : "Descripción por defecto"
+  "nombre" : "Transporte Público"
+}, {
+  "nombre" : "Gasolina"
+}, {
+  "nombre" : "Regalos"
+}, {
+  "nombre" : "Reparaciones"
+}, {
+  "nombre" : "Gastos Médicos"
+}, {
+  "nombre" : "Mi Cuenta Personal_Alimentación"
+}, {
+  "nombre" : "Mi Cuenta Personal_Transporte"
+}, {
+  "nombre" : "Mi Cuenta Personal_Entretenimiento"
+}, {
+  "nombre" : "Piso Compartido_Alimentación"
+}, {
+  "nombre" : "Piso Compartido_Transporte"
+}, {
+  "nombre" : "Piso Compartido_Entretenimiento"
+}, {
+  "nombre" : "Patata_Alimentación"
+}, {
+  "nombre" : "Patata_Transporte"
+}, {
+  "nombre" : "Patata_Entretenimiento"
 } ]

@@ -28,17 +28,21 @@ public class AlertaImpl implements Alerta {
     @JsonProperty("categoria")
     private CategoriaImpl categoria;
 
+    @JsonProperty("nombreCuenta")
+    private String nombreCuenta;
+    
     @JsonProperty("activa")
     private boolean esActiva;
 
     public AlertaImpl() {
     }
 
-    public AlertaImpl(String tipo, double limite, CategoriaImpl categoria) {
+    public AlertaImpl(String tipo, double limite, CategoriaImpl categoria, String nombreCuenta) {
         this.idAlerta = UUID.randomUUID().toString();
         this.tipo = tipo;
         this.limite = limite;
         this.categoria = categoria;
+        this.nombreCuenta = nombreCuenta;
         this.esActiva = true;
     }
 
@@ -62,6 +66,14 @@ public class AlertaImpl implements Alerta {
         return this.categoria;
     }
 
+    public String getNombreCuenta() { 
+        return nombreCuenta; 
+    }
+    
+    public void setNombreCuenta(String nombreCuenta) {
+        this.nombreCuenta = nombreCuenta; 
+    }
+    
     public boolean isEsActiva() {
         return this.esActiva;
     }
@@ -96,7 +108,9 @@ public class AlertaImpl implements Alerta {
 
     @Override
     public boolean comprobar(Gasto gastoNuevo, TipoCuenta cuenta) {
-        if (!this.esActiva || !gastoNuevo.getCategoria().getNombre().equals(this.categoria.getNombre())) {
+        if (!this.esActiva) return false;
+
+        if (this.categoria != null && !gastoNuevo.getCategoria().getNombre().equals(this.categoria.getNombre())) {
             return false;
         }
 
@@ -105,10 +119,10 @@ public class AlertaImpl implements Alerta {
         LocalDate fechaReferencia = gastoNuevo.getFecha();
 
         for (Gasto g : gastos) {
-            if (g.getCategoria().getNombre().equals(this.categoria.getNombre())) {
-                if (esMismoPeriodo(g.getFecha(), fechaReferencia)) {
-                    totalAcumulado += g.getCantidad();
-                }
+            boolean categoriaValida = (this.categoria == null) || g.getCategoria().getNombre().equals(this.categoria.getNombre());
+            
+            if (categoriaValida && esMismoPeriodo(g.getFecha(), fechaReferencia)) {
+                totalAcumulado += g.getCantidad();
             }
         }
 
@@ -118,8 +132,12 @@ public class AlertaImpl implements Alerta {
     
     @Override
     public Notificacion crearNotificacion() {
-        String mensaje = "Límite " + tipo + " superado en " + categoria.getNombre() +
-                         " (Límite: " + limite + ")";
+    	String nombreCat = (this.categoria != null) ? this.categoria.getNombre() : "General";
+        String prefijo = (this.nombreCuenta != null) ? this.nombreCuenta + "_" : "";
+        
+        String mensaje = prefijo + "Límite " + tipo + " superado en " + nombreCat +
+                         " (Límite: " + limite + "€)";
+                         
         return new NotificacionImpl(mensaje, LocalDate.now());
     }
 
