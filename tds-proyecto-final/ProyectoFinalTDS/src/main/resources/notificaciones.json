@@ -42,4 +42,8 @@
   "id" : "3f7d9790-c582-4a0f-b32f-b1652e77635e",
   "mensaje" : "Piso Compartido_Límite Mensual superado en General (Límite: 5.0€)",
   "fecha" : "29/12/2025"
+}, {
+  "id" : "17ccb300-0f32-40a4-a811-01a912343119",
+  "mensaje" : "Mi Cuenta Personal_Límite Semanal superado en General (Límite: 10.0€)",
+  "fecha" : "29/12/2025"
 } ]

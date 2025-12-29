@@ -8,6 +8,8 @@ public interface ParticipanteCuenta {
 	void actualizarSaldo(double cantidad);
 
 	double getPorcentajeAsumido();
+	
+	void setSaldo(double saldo);
 
 	void setPorcentajeAsumido(double porcentaje);
 }

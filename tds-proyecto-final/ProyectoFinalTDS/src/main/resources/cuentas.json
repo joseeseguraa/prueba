@@ -5,39 +5,110 @@
 }, {
   "tipo" : "compartida",
   "nombre" : "Piso Compartido",
-  "gastos" : [ ],
+  "gastos" : [ {
+    "id" : "9699656c",
+    "descripcion" : "Sin concepto",
+    "cantidad" : 2.0,
+    "fecha" : "29/12/2025",
+    "categoria" : {
+      "nombre" : "Piso Compartido_Alimentación"
+    },
+    "pagador" : "Yo"
+  } ],
   "participantes" : [ {
     "nombre" : "Yo",
-    "saldo" : -1987.315000000001,
+    "saldo" : -1985.815000000001,
     "porcentaje" : 25.0
   }, {
     "nombre" : "Paco",
-    "saldo" : -7072.705000000003,
+    "saldo" : -7073.205000000003,
     "porcentaje" : 25.0
   }, {
     "nombre" : "Pepe",
-    "saldo" : 16034.494999999995,
+    "saldo" : 16033.994999999995,
     "porcentaje" : 25.0
   }, {
     "nombre" : "Juan",
-    "saldo" : -7385.2350000000015,
+    "saldo" : -7385.7350000000015,
     "porcentaje" : 25.0
   } ]
 }, {
   "tipo" : "compartida",
   "nombre" : "Patata",
-  "gastos" : [ ],
+  "gastos" : [ {
+    "id" : "587ce6b6",
+    "descripcion" : "Sin concepto",
+    "cantidad" : 100.0,
+    "fecha" : "29/12/2025",
+    "categoria" : {
+      "nombre" : "Patata_Transporte"
+    },
+    "pagador" : "Yo"
+  }, {
+    "id" : "e2306abb",
+    "descripcion" : "Sin concepto",
+    "cantidad" : 100.0,
+    "fecha" : "29/12/2025",
+    "categoria" : {
+      "nombre" : "Patata_Transporte"
+    },
+    "pagador" : "Jose"
+  }, {
+    "id" : "d3c392b2",
+    "descripcion" : "Sin concepto",
+    "cantidad" : 100.0,
+    "fecha" : "29/12/2025",
+    "categoria" : {
+      "nombre" : "Patata_Alimentación"
+    },
+    "pagador" : "Hugo"
+  } ],
   "participantes" : [ {
     "nombre" : "Yo",
-    "saldo" : 0.0,
+    "saldo" : -1.4210854715202004E-14,
     "porcentaje" : 33.333333333333336
   }, {
     "nombre" : "Jose",
-    "saldo" : 0.0,
+    "saldo" : -1.4210854715202004E-14,
     "porcentaje" : 33.333333333333336
   }, {
     "nombre" : "Hugo",
-    "saldo" : 0.0,
+    "saldo" : -1.4210854715202004E-14,
     "porcentaje" : 33.333333333333336
+  } ]
+}, {
+  "tipo" : "compartida",
+  "nombre" : "Porcentajes",
+  "gastos" : [ {
+    "id" : "b0c50b9f",
+    "descripcion" : "Sin concepto",
+    "cantidad" : 10.0,
+    "fecha" : "29/12/2025",
+    "categoria" : {
+      "nombre" : "Porcentajes_Alimentación"
+    },
+    "pagador" : "Looo"
+  }, {
+    "id" : "f4e14c50",
+    "descripcion" : "Sin concepto",
+    "cantidad" : 10.0,
+    "fecha" : "29/12/2025",
+    "categoria" : {
+      "nombre" : "Porcentajes_Transporte"
+    },
+    "pagador" : "Yo"
+  } ],
+  "participantes" : [ {
+    "nombre" : "Yo",
+    "saldo" : 2.0,
+    "porcentaje" : 40.0
+  }, {
+    "nombre" : "Looo",
+    "saldo" : 4.0,
+    "porcentaje" : 30.0
+  }, {
+    "nombre" : "Grillo",
+    "saldo" : -6.0,
+    "porcentaje" : 30.0
   } ]
 } ]

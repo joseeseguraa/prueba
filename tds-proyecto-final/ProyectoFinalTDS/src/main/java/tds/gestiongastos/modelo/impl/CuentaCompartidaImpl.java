@@ -72,6 +72,37 @@ public class CuentaCompartidaImpl extends TipoCuentaImpl implements CuentaCompar
         }
     }
     
+ 
+    public void recalcularSaldos() {
+        if (participantes != null) {
+            for (ParticipanteCuenta p : participantes) {
+                p.setSaldo(0.0);
+            }
+        }
+
+        for (Gasto g : getGastos()) {
+            distribuirGastoEnSaldos(g);
+        }
+    }
+    
+    
+    private void distribuirGastoEnSaldos(Gasto gasto) {
+        if (participantes == null || participantes.isEmpty()) return;
+
+        String nombrePagador = gasto.getPagador(); 
+        double importeTotal = gasto.getCantidad();
+
+        for (ParticipanteCuenta p : participantes) {
+            double parteQueDebePagar = importeTotal * (p.getPorcentajeAsumido() / 100.0);
+
+            if (p.getNombre().equals(nombrePagador)) {
+                p.actualizarSaldo(importeTotal - parteQueDebePagar);
+            } else {
+                p.actualizarSaldo(-parteQueDebePagar);
+            }
+        }
+    }
+    
     @Override
     public String toString() {
     	return super.getNombre() + " (Compartida)";

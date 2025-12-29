@@ -127,6 +127,12 @@ public class GestionGastos {
         if (pagador != null) gasto.setPagador(pagador);
         
         repoGastos.updateGasto(gasto);
+
+        if (cuentaActiva instanceof CuentaCompartidaImpl) {
+            ((CuentaCompartidaImpl) cuentaActiva).recalcularSaldos();
+            System.out.println(">> Saldos recalculados tras la edición.");
+        }
+
         repoCuentas.updateCuenta(cuentaActiva);
         
         System.out.println("...Gasto MODIFICADO a: " + nuevaDesc + " | " + nuevaCant + "€");
@@ -136,11 +142,12 @@ public class GestionGastos {
     public void borrarGastos(List<Gasto> listaGastosABorrar) {
         if (cuentaActiva == null || listaGastosABorrar == null) return;
         
-        for (Gasto g : listaGastosABorrar) {
+        listaGastosABorrar.forEach(g -> {
             System.out.println("Eliminando Gasto: " + g.getDescripcion() + " (" + g.getCantidad() + "€)");
             cuentaActiva.eliminarGasto(g);
             repoGastos.removeGasto(g);
-        }
+        });
+        
         repoCuentas.updateCuenta(cuentaActiva);
         System.out.println(SEPARADOR);
     }
@@ -184,9 +191,7 @@ public class GestionGastos {
     }
 
     public void eliminarCategorias(List<Categoria> lista) {
-        for (Categoria c : lista) {
-            eliminarCategoria(c);
-        }
+        lista.forEach(this::eliminarCategoria);
     }
 
     public void crearCuentaCompartida(String nombre, List<ParticipanteCuenta> participantes, boolean esEquitativa) {
@@ -237,13 +242,14 @@ public class GestionGastos {
     }
 
     public void borrarAlerta(List<Alerta> lista) {
-        for (Alerta a : new ArrayList<>(lista)) {
+        lista.forEach(a -> {
             System.out.println("Alerta ELIMINADA: " + a.getTipo() + " (" + a.getLimite() + "€)");
             repoAlertas.removeAlerta(a);
-        }
+        });
         System.out.println(SEPARADOR);
     }
     
+
     public void modificarAlerta(Alerta alerta, double nuevoLimite) {
         if (alerta != null && alerta instanceof AlertaImpl) {
             System.out.println("Alerta MODIFICADA: Límite anterior " + alerta.getLimite() + "€ -> Nuevo: " + nuevoLimite + "€");
@@ -265,21 +271,18 @@ public class GestionGastos {
         return filtradas;
     }
     
+    
     private List<String> checkAlertas(Gasto gasto) {
-        List<String> avisos = new ArrayList<>();
-        List<Alerta> misAlertas = getAlertas();
-        
-        for (Alerta a : misAlertas) {
-            if (a.getCategoria() == null || a.getCategoria().equals(gasto.getCategoria())) {
-                if (a.comprobar(gasto, cuentaActiva)) {
-                    Notificacion n = a.crearNotificacion();
-                    repoNotificaciones.addNotificacion(n);
-                    avisos.add(n.getMensaje());
-                    System.out.println("¡Límite superado! Generada notificación: " + limpiarTexto(n.getMensaje()));
-                }
-            }
-        }
-        return avisos;
+        return getAlertas().stream()
+            .filter(a -> a.getCategoria() == null || a.getCategoria().equals(gasto.getCategoria()))
+            .filter(a -> a.comprobar(gasto, cuentaActiva))
+            .map(a -> {
+                Notificacion n = a.crearNotificacion();
+                repoNotificaciones.addNotificacion(n);
+                System.out.println("¡Límite superado! Generada notificación: " + limpiarTexto(n.getMensaje()));
+                return n.getMensaje();
+            })
+            .collect(Collectors.toList());
     }
 
     public void anadirNotificacion(Notificacion notificacion) {
@@ -295,12 +298,13 @@ public class GestionGastos {
     }
 
     public void borrarNotificacion(List<Notificacion> lista) {
-        for (Notificacion n : new ArrayList<>(lista)) {
+        lista.forEach(n -> {
             System.out.println("Notificación ELIMINADA del historial: " + limpiarTexto(n.getMensaje()));
             repoNotificaciones.removeNotificacion(n);
-        }
+        });
         System.out.println(SEPARADOR);
     }
+
 
     public boolean importarDatos(File fichero) {
         if (cuentaActiva == null) return false;

@@ -26,6 +26,7 @@ import tds.gestiongastos.modelo.CuentaCompartida;
 import tds.gestiongastos.modelo.Gasto;
 import tds.gestiongastos.modelo.ParticipanteCuenta;
 import tds.gestiongastos.modelo.TipoCuenta;
+import tds.gestiongastos.modelo.impl.CuentaCompartidaImpl;
 
 public class CuentasCompartidasVistaControlador {
 
@@ -77,12 +78,14 @@ public class CuentasCompartidasVistaControlador {
                 @Override
                 protected void updateItem(ParticipanteCuenta item, boolean empty) {
                     super.updateItem(item, empty);
-                    setText((empty || item == null) ? "Todos" : item.getNombre());
+                    setText((empty || item == null) ? "Todos" : item.toString());
                 }
             });
             
             comboFiltroUsuario.setConverter(new StringConverter<ParticipanteCuenta>() {
-                @Override public String toString(ParticipanteCuenta p) { return p == null ? "Todos" : p.getNombre(); }
+                @Override public String toString(ParticipanteCuenta p) { 
+                    return p == null ? "Todos" : p.toString(); 
+                }
                 @Override public ParticipanteCuenta fromString(String string) { return null; }
             });
         }
@@ -170,8 +173,15 @@ public class CuentasCompartidasVistaControlador {
         alert.setContentText("¿Eliminar los " + seleccionados.size() + " gastos seleccionados?");
         if (alert.showAndWait().get() == ButtonType.OK) {
             Configuracion.getInstancia().getGestionGastos().borrarGastos(new ArrayList<>(seleccionados));
+            
+            TipoCuenta cuentaActual = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
+            if (cuentaActual instanceof CuentaCompartidaImpl) {
+                ((CuentaCompartidaImpl) cuentaActual).recalcularSaldos();
+            }
+            
             cargarDatosTabla(null);
         }       
+            
         System.out.println(SEPARADOR);
     }
 
@@ -184,7 +194,8 @@ public class CuentasCompartidasVistaControlador {
         System.out.println(SEPARADOR);
     }
     
-    @FXML public void botonEditarGasto(ActionEvent event) {
+    @FXML 
+    public void botonEditarGasto(ActionEvent event) {
         System.out.println(">>> Acción: Editar Gasto");
         ObservableList<Gasto> seleccionados = tablaGastos.getSelectionModel().getSelectedItems();
 
@@ -203,19 +214,41 @@ public class CuentasCompartidasVistaControlador {
 
         Gasto gastoAEditar = seleccionados.get(0);
         
-        String usuarioActual = Configuracion.getInstancia().getGestionGastos().getCuentaActiva().getNombre();
-
-        if (!gastoAEditar.getPagador().equals(usuarioActual)) {
-            mostrarAviso("Permiso Denegado", "Solo puedes editar los gastos que has pagado tú.\n" +
-                          "Este gasto pertenece a: " + gastoAEditar.getPagador());
-            System.out.println(SEPARADOR);
-            return;
-        }
-
         Configuracion.getInstancia().getSceneManager().showEditarGasto(gastoAEditar);
         
         cargarDatosTabla(null);
         System.out.println(SEPARADOR);
+    }
+    
+
+    @FXML 
+    public void botonVerBalance(ActionEvent event) {
+        TipoCuenta cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
+        
+        if (cuenta instanceof CuentaCompartida) {
+            List<ParticipanteCuenta> participantes = ((CuentaCompartida) cuenta).getParticipantes();
+            StringBuilder mensaje = new StringBuilder();
+            
+            mensaje.append("Estado actual de la cuenta:\n\n");
+            
+            for (ParticipanteCuenta p : participantes) {
+                String signo = p.getSaldo() >= 0 ? "+" : "";
+                mensaje.append(String.format("• %s (%s%%):  %s%.2f €\n", 
+                               p.getNombre(), 
+                               String.format("%.1f", p.getPorcentajeAsumido()),
+                               signo, 
+                               p.getSaldo()));
+            }
+            
+            mensaje.append("\n------------------------------------------------\n");
+            mensaje.append("(+) Le deben dinero  |  (-) Debe dinero al grupo");
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Balance de Cuentas");
+            alert.setHeaderText("Distribución de Gastos");
+            alert.setContentText(mensaje.toString());
+            alert.showAndWait();
+        }
     }
 
     @FXML public void botonCategorias(ActionEvent event) {

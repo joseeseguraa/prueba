@@ -57,6 +57,7 @@
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonVerLimites" styleClass="sidebar-btn" text="Mis Límites y Alertas" />
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonGrafico" styleClass="sidebar-btn" text="Gráficos" />
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonCalendario" styleClass="sidebar-btn" text="Calendario" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#botonVerBalance" styleClass="sidebar-btn" text="Ver Balance" />
 
                 <Separator opacity="0.3" prefWidth="200.0">
                     <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>

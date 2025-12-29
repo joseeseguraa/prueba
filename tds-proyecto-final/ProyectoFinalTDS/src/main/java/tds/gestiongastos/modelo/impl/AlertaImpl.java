@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tds.gestiongastos.modelo.Alerta;
 import tds.gestiongastos.modelo.Categoria;
+import tds.gestiongastos.modelo.EstrategiaTemporal;
 import tds.gestiongastos.modelo.Gasto;
 import tds.gestiongastos.modelo.Notificacion;
 import tds.gestiongastos.modelo.TipoCuenta;
@@ -33,7 +35,10 @@ public class AlertaImpl implements Alerta {
     
     @JsonProperty("activa")
     private boolean esActiva;
-
+    
+    @JsonIgnore
+    private EstrategiaTemporal estrategia;
+    
     public AlertaImpl() {
     }
 
@@ -84,6 +89,15 @@ public class AlertaImpl implements Alerta {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+        actualizarEstrategia();
+    }
+    
+    private void actualizarEstrategia() {
+        if ("Semanal".equalsIgnoreCase(this.tipo)) {
+            this.estrategia = new EstrategiaSemanal();
+        } else {
+            this.estrategia = new EstrategiaMensual();
+        }
     }
 
     public void setLimite(double limite) {
@@ -110,6 +124,10 @@ public class AlertaImpl implements Alerta {
     public boolean comprobar(Gasto gastoNuevo, TipoCuenta cuenta) {
         if (!this.esActiva) return false;
 
+        if (this.estrategia == null) {
+            actualizarEstrategia();
+        }
+
         if (this.categoria != null && !gastoNuevo.getCategoria().getNombre().equals(this.categoria.getNombre())) {
             return false;
         }
@@ -121,7 +139,7 @@ public class AlertaImpl implements Alerta {
         for (Gasto g : gastos) {
             boolean categoriaValida = (this.categoria == null) || g.getCategoria().getNombre().equals(this.categoria.getNombre());
             
-            if (categoriaValida && esMismoPeriodo(g.getFecha(), fechaReferencia)) {
+            if (categoriaValida && estrategia.esMismoPeriodo(g.getFecha(), fechaReferencia)) {
                 totalAcumulado += g.getCantidad();
             }
         }
@@ -140,21 +158,4 @@ public class AlertaImpl implements Alerta {
                          
         return new NotificacionImpl(mensaje, LocalDate.now());
     }
-
-
-    private boolean esMismoPeriodo(LocalDate fechaGasto, LocalDate fechaActual) {
-        if ("Mensual".equalsIgnoreCase(this.tipo)) {
-            return fechaGasto.getMonth() == fechaActual.getMonth() &&
-                   fechaGasto.getYear() == fechaActual.getYear();
-        }
-        else if ("Semanal".equalsIgnoreCase(this.tipo)) {
-            WeekFields weekFields = WeekFields.of(Locale.getDefault());
-            int semanaGasto = fechaGasto.get(weekFields.weekOfWeekBasedYear());
-            int semanaActual = fechaActual.get(weekFields.weekOfWeekBasedYear());
-            return semanaGasto == semanaActual &&
-                   fechaGasto.getYear() == fechaActual.getYear();
-        }
-        return false;
-    }
-    
 }

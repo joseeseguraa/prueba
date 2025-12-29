@@ -34,4 +34,16 @@
   "nombre" : "Patata_Transporte"
 }, {
   "nombre" : "Patata_Entretenimiento"
+}, {
+  "nombre" : "pruebaPorcentaje_Alimentación"
+}, {
+  "nombre" : "pruebaPorcentaje_Transporte"
+}, {
+  "nombre" : "pruebaPorcentaje_Entretenimiento"
+}, {
+  "nombre" : "Porcentajes_Alimentación"
+}, {
+  "nombre" : "Porcentajes_Transporte"
+}, {
+  "nombre" : "Porcentajes_Entretenimiento"
 } ]

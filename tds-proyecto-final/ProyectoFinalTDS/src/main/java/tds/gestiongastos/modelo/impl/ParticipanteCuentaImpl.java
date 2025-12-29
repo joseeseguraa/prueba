@@ -39,6 +39,11 @@ public class ParticipanteCuentaImpl implements ParticipanteCuenta {
 	public double getSaldo() {
 		return saldo;
 	}
+	
+	@Override
+	public void setSaldo(double saldo) {
+	    this.saldo = saldo;
+	}
 
 	@Override
 	public double getPorcentajeAsumido() {
