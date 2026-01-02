@@ -3,11 +3,15 @@ package tds.gestiongastos.vista;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -18,6 +22,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 import tds.gestiongastos.main.Configuracion;
@@ -42,6 +47,7 @@ public class CuentasCompartidasVistaControlador {
     @FXML private ComboBox<Categoria> comboCategoriasFiltro;
     @FXML private ComboBox<ParticipanteCuenta> comboFiltroUsuario;
     @FXML private Label lblGastoTotal;
+    @FXML private PieChart graficoCategorias;
 
     private static final String SEPARADOR = "--------------------------------------------------";
 
@@ -121,11 +127,59 @@ public class CuentasCompartidasVistaControlador {
         });
     }
 
+    private void actualizarGrafico() {
+        if (tablaGastos.getItems().isEmpty()) {
+            graficoCategorias.setData(FXCollections.observableArrayList());
+            return;
+        }
+
+        Map<String, Double> totalesPorCategoria = tablaGastos.getItems().stream()
+            .collect(Collectors.groupingBy(
+                g -> {
+                    String nombre = g.getCategoria().getNombre();
+                    int index = nombre.indexOf("_");
+                    return (index != -1) ? nombre.substring(index + 1) : nombre;
+                },
+                Collectors.summingDouble(Gasto::getCantidad)
+            ));
+
+       ObservableList<PieChart.Data> datosGrafico = FXCollections.observableArrayList();
+        
+        totalesPorCategoria.forEach((nombre, total) -> {
+            datosGrafico.add(new PieChart.Data(nombre + " " + String.format("%.2f", total) + "€", total));
+        });
+
+        graficoCategorias.setData(datosGrafico);
+        
+        
+        graficoCategorias.setLabelsVisible(false);
+        graficoCategorias.setLegendVisible(false);
+
+            for (PieChart.Data data : graficoCategorias.getData()) {
+                if (data.getNode() != null) {
+                    Tooltip tt = new Tooltip(data.getName());
+                    
+                    
+                    tt.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #333;");
+                    
+                    Tooltip.install(data.getNode(), tt);
+                    
+                    data.getNode().setOnMouseEntered(e -> {
+                        data.getNode().setStyle("-fx-opacity: 0.7; -fx-cursor: hand;");
+                    });
+                    data.getNode().setOnMouseExited(e -> {
+                        data.getNode().setStyle("");
+                    });
+                }
+            }
+    }
+    
     private void cargarDatosTabla(List<Gasto> datosFiltrados) {
         TipoCuenta cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
         ObservableList<Gasto> lista = FXCollections.observableArrayList(datosFiltrados != null ? datosFiltrados : (cuenta != null ? cuenta.getGastos() : List.of()));
         tablaGastos.setItems(lista);
         actualizarEtiquetaTotal(lista);
+        actualizarGrafico();
     }
 
     @FXML public void botonLimpiarFiltros(ActionEvent event) {

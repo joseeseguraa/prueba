@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tds.gestiongastos.main.Configuracion;
-import tds.gestiongastos.modelo.CuentaCompartida;
 import tds.gestiongastos.modelo.Gasto;
 import tds.gestiongastos.modelo.ImportadorGastos;
 import tds.gestiongastos.modelo.TipoCuenta;
@@ -34,7 +33,8 @@ public class CSVImportadorGastos implements ImportadorGastos {
         }
 
         TipoCuenta cuentaActiva = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
-        boolean esCuentaCompartida = (cuentaActiva instanceof CuentaCompartida);
+        
+        boolean esCuentaCompartida = !cuentaActiva.getClass().getSimpleName().contains("Personal");
 
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(new FileInputStream(fichero), codificacion))) {
@@ -50,38 +50,45 @@ public class CSVImportadorGastos implements ImportadorGastos {
                 if (columnas.length >= 7) {
                     try {
                         String tipoCuentaCSV = columnas[1].trim();
-
+                        String pagadorCSV = columnas[5].trim();
+                        
                         if (esCuentaCompartida) {
                             if ("Personal".equalsIgnoreCase(tipoCuentaCSV)) {
-                                continue; 
+                                continue;
                             }
                         } else {
                             if (!"Personal".equalsIgnoreCase(tipoCuentaCSV)) {
                                 continue;
                             }
                         }
-                        
-                        String fechaStr = columnas[0].trim();
+
+                        if (pagadorCSV.equalsIgnoreCase("Me")) {
+                            pagadorCSV = "Yo";
+                        }
+
+                        String fechaCompleta = columnas[0].trim();
+                        String soloFecha = fechaCompleta.split(" ")[0];
+                        LocalDate fecha = LocalDate.parse(soloFecha, FORMATO);
+
                         String nombreCat = columnas[3].trim();
                         String desc = columnas[4].trim();
-                        String pagador = columnas[5].trim();
-                        String importeStr = columnas[6].trim().replace("€", "");
+                        String importeStr = columnas[6].trim().replace("€", "").replace(",", ".");
 
                         double importe = Double.parseDouble(importeStr);
-                        LocalDate fecha = LocalDate.parse(fechaStr, FORMATO);
 
                         GastoImpl nuevoGasto = new GastoImpl(desc, importe, fecha, new CategoriaImpl(nombreCat));
-                        nuevoGasto.setPagador(pagador);
+                        nuevoGasto.setPagador(pagadorCSV);
 
                         listaGastos.add(nuevoGasto);
 
                     } catch (Exception e) {
+                        System.err.println("Error importando línea: " + linea + " -> " + e.getMessage());
                     }
                 }
             }
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error general leyendo CSV: " + e.getMessage());
         }
 
         return listaGastos;

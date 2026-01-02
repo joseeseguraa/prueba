@@ -1,0 +1,15 @@
+
+.month-view .entry-view {
+    -fx-min-height: 15px;
+    -fx-max-height: 15px;
+    -fx-padding: 0 2px 0 2px; 
+}
+
+.month-view .entry-view .label {
+    -fx-font-size: 9px; 
+    -fx-padding: 0;
+}
+
+.month-view .day-header-view {
+    -fx-padding: 2px;
+}

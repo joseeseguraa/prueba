@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import tds.gestiongastos.modelo.Gasto;
 
 public class SceneManager {
@@ -57,7 +58,7 @@ public class SceneManager {
     }
     
     public void showCalendario() {
-    	cargarYMostarDialogo("calendario", "Abrir Calendario");
+    	cargarYMostar("calendario");
     }
     
     public void showHistorialNotificaciones() {
@@ -67,6 +68,10 @@ public class SceneManager {
     public void showImportarGastos() {
         cargarYMostarDialogo("importar_gastos", "Importar Gastos");
     }
+    
+    public void showGrafico() {
+    	cargarYMostar("grafico");
+    } 
 
     
     public void showEditarGasto(Gasto gastoAEditar) {
@@ -100,7 +105,8 @@ public class SceneManager {
             Stage stage = new Stage(StageStyle.UTILITY);
             stage.setTitle(titulo);
             stage.setScene(scene);
-            stage.initOwner(this.stage);
+            Window actual = Stage.getWindows().stream().filter(Window::isShowing).reduce((f, s) -> s).get();
+            stage.initOwner(actual);
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setResizable(true);
 

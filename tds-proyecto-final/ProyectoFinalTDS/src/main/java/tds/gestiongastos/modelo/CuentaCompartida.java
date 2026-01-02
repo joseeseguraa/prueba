@@ -9,4 +9,7 @@ public interface CuentaCompartida extends TipoCuenta {
     void calculoDistribucionEquitativa();
 
     void calculoPorcentajeGastoAsumido();
+    
+    void recalcularSaldos();    
+    
 }

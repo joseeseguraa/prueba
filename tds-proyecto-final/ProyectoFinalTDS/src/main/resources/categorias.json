@@ -46,4 +46,20 @@
   "nombre" : "Porcentajes_Transporte"
 }, {
   "nombre" : "Porcentajes_Entretenimiento"
+}, {
+  "nombre" : "Mi Cuenta Personal_Comida"
+}, {
+  "nombre" : "Mi Cuenta Personal_Gasolina"
+}, {
+  "nombre" : "Mi Cuenta Personal_Transporte Público"
+}, {
+  "nombre" : "Mi Cuenta Personal_Ocio"
+}, {
+  "nombre" : "Mi Cuenta Personal_Reparaciones"
+}, {
+  "nombre" : "Mi Cuenta Personal_Gastos Médicos"
+}, {
+  "nombre" : "Mi Cuenta Personal_Clase"
+}, {
+  "nombre" : "Mi Cuenta Personal_Coches"
 } ]

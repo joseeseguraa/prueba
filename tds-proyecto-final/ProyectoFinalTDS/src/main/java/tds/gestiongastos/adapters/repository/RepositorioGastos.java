@@ -8,8 +8,6 @@ public interface RepositorioGastos {
 
 	List<Gasto> getAllGastos();
 
-	void addGasto(Gasto gasto);
-
 	void removeGasto(Gasto gasto);
 
 	void updateGasto(Gasto gasto);

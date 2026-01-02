@@ -1,10 +1,10 @@
 package tds.gestiongastos.main;
 
-import tds.gestiongastos.adapters.repository.impl.RepositorioAlertasImpl; // Asumo que existe o la crearás
+import tds.gestiongastos.adapters.repository.impl.RepositorioAlertasImpl; 
 import tds.gestiongastos.adapters.repository.impl.RepositorioCategoriasImpl;
 import tds.gestiongastos.adapters.repository.impl.RepositorioCuentasImpl;
 import tds.gestiongastos.adapters.repository.impl.RepositorioGastosImpl;
-import tds.gestiongastos.adapters.repository.impl.RepositorioNotificacionesImpl; // Asumo que existe o la crearás
+import tds.gestiongastos.adapters.repository.impl.RepositorioNotificacionesImpl; 
 import tds.gestiongastos.controlador.GestionGastos;
 
 public class ConfiguracionImpl extends Configuracion {

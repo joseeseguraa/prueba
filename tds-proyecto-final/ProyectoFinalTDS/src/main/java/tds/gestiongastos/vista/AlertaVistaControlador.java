@@ -161,11 +161,11 @@ public class AlertaVistaControlador {
 			comboPeriodicidad.setValue(seleccionada.getTipo());
 			comboAlertaCategoria.setValue(seleccionada.getCategoria());
 			
-			comboPeriodicidad.setDisable(true);      // Bloquea el combo de tiempo
-            comboAlertaCategoria.setDisable(true);   // Bloquea el combo de categoría
+			comboPeriodicidad.setDisable(true);      
+            comboAlertaCategoria.setDisable(true);   
             
             if (btnNuevaCategoria != null) {
-                btnNuevaCategoria.setDisable(true);  // Bloquea el botón de crear categoría (+)
+                btnNuevaCategoria.setDisable(true);
             }
 			
 			if (btnGuardar != null) {

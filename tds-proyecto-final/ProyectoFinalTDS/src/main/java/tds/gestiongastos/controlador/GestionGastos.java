@@ -15,6 +15,7 @@ import tds.gestiongastos.adapters.repository.RepositorioGastos;
 import tds.gestiongastos.adapters.repository.RepositorioNotificaciones;
 import tds.gestiongastos.modelo.Alerta;
 import tds.gestiongastos.modelo.Categoria;
+import tds.gestiongastos.modelo.CuentaCompartida;
 import tds.gestiongastos.modelo.Gasto;
 import tds.gestiongastos.modelo.ImportadorGastos;
 import tds.gestiongastos.modelo.Notificacion;
@@ -100,7 +101,6 @@ public class GestionGastos {
         Gasto nuevoGasto = new GastoImpl(descripcion, cantidad, fecha, (CategoriaImpl) categoria);
         if (pagador != null) nuevoGasto.setPagador(pagador);
 
-        repoGastos.addGasto(nuevoGasto);
         cuentaActiva.agregarGasto(nuevoGasto);
         repoCuentas.updateCuenta(cuentaActiva);
         
@@ -128,8 +128,8 @@ public class GestionGastos {
         
         repoGastos.updateGasto(gasto);
 
-        if (cuentaActiva instanceof CuentaCompartidaImpl) {
-            ((CuentaCompartidaImpl) cuentaActiva).recalcularSaldos();
+        if (cuentaActiva instanceof CuentaCompartida) {
+            ((CuentaCompartida) cuentaActiva).recalcularSaldos();
             System.out.println(">> Saldos recalculados tras la edición.");
         }
 
@@ -147,6 +147,11 @@ public class GestionGastos {
             cuentaActiva.eliminarGasto(g);
             repoGastos.removeGasto(g);
         });
+        
+        if (cuentaActiva instanceof CuentaCompartida) {
+            ((CuentaCompartida) cuentaActiva).recalcularSaldos();
+            System.out.println(">> Saldos recalculados tras el borrado.");
+        }
         
         repoCuentas.updateCuenta(cuentaActiva);
         System.out.println(SEPARADOR);
@@ -195,7 +200,7 @@ public class GestionGastos {
     }
 
     public void crearCuentaCompartida(String nombre, List<ParticipanteCuenta> participantes, boolean esEquitativa) {
-        CuentaCompartidaImpl nuevaCuenta = new CuentaCompartidaImpl(nombre, participantes);
+        CuentaCompartida nuevaCuenta = new CuentaCompartidaImpl(nombre, participantes);
         if (esEquitativa) nuevaCuenta.calculoDistribucionEquitativa();
         else nuevaCuenta.calculoPorcentajeGastoAsumido();
         repoCuentas.addCuenta(nuevaCuenta);
@@ -309,30 +314,50 @@ public class GestionGastos {
     public boolean importarDatos(File fichero) {
         if (cuentaActiva == null) return false;
         System.out.println("Iniciando IMPORTACIÓN desde: " + fichero.getName());
-        System.out.println(SEPARADOR);
         
         String ext = fichero.getName().substring(fichero.getName().lastIndexOf(".") + 1).toLowerCase();
         ImportadorGastos adaptador = FactoriaImportadoresImpl.crearImportador(ext);
+        
         if (adaptador != null) {
             List<Gasto> lista = adaptador.importarGastos(fichero);
-            System.out.println("Archivo leído. Procesando " + lista.size() + " gastos...");
+            System.out.println("Archivo leído. Procesando " + lista.size() + " gastos potenciales...");
             
             for (Gasto g : lista) {
+                if (cuentaActiva instanceof CuentaCompartida) {
+                    CuentaCompartida cc = (CuentaCompartida) cuentaActiva;
+                    String pagadorImportado = g.getPagador();
+                    
+                    boolean esValido = "Yo".equalsIgnoreCase(pagadorImportado);
+                    
+                    if (!esValido) {
+                        for (ParticipanteCuenta p : cc.getParticipantes()) {
+                            if (p.getNombre().equalsIgnoreCase(pagadorImportado)) {
+                                esValido = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!esValido) {
+                        System.out.println("Gasto ignorado: El pagador '" + pagadorImportado + "' no pertenece a esta cuenta compartida.");
+                        continue;
+                    }
+                }
+
                 String nomCat = g.getCategoria().getNombre();
                 Categoria cat = repoCategorias.findByNombre(cuentaActiva.getNombre() + "_" + nomCat);
                 if (cat == null) {
                    registrarCategoria(nomCat);
-                    cat = repoCategorias.findByNombre(cuentaActiva.getNombre() + "_" + nomCat);
+                   cat = repoCategorias.findByNombre(cuentaActiva.getNombre() + "_" + nomCat);
                 }
                 g.setCategoria(cat);
-                repoGastos.addGasto(g);
                 cuentaActiva.agregarGasto(g);
                 
                 System.out.println("Importando gasto: " + g.getDescripcion() + " (" + g.getCantidad() + "€)");
                 checkAlertas(g);
             }
             repoCuentas.updateCuenta(cuentaActiva);
-            System.out.println("Importación finalizada con éxito.");
+            System.out.println("Importación finalizada.");
             System.out.println(SEPARADOR);
             return true;
         }

@@ -1,9 +1,7 @@
 package tds.gestiongastos.modelo.impl;
 
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -25,9 +25,6 @@ public class RepositorioGastosImpl implements RepositorioGastos {
 		return todosLosGastos;
 	}
 
-	@Override
-	public void addGasto(Gasto gasto) {
-	}
 
 	@Override
 	public void removeGasto(Gasto gasto) {

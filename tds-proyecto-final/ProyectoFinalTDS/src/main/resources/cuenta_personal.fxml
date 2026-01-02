@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -102,7 +103,7 @@
                     <children>
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label styleClass="stat-label" text="Gastado este mes" />
+                                <Label styleClass="stat-label" text="Gasto Total" />
                                 <Label fx:id="lblGastoTotal" styleClass="stat-value" text="0.00 €" />
                             </children>
                         </VBox>
@@ -146,12 +147,20 @@
                 <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                     <children>
 
-                        <VBox alignment="CENTER" prefWidth="350.0" styleClass="chart-container">
-                            <children>
-                                <Label style="-fx-font-weight:bold; -fx-padding:0 0 10 0;" text="Distribución por Categoría" textFill="#7f8c8d" />
-                                <Label text="(Gráfico Circular JavaFX)" textFill="#bdc3c7" />
-                            </children>
-                        </VBox>
+                        <VBox alignment="CENTER" styleClass="chart-container" HBox.hgrow="ALWAYS">
+						    <children>
+						        <Label styleClass="card-header" text="Gasto por Categoría" />
+						        
+						        <PieChart fx:id="graficoCategorias" 
+						                  labelsVisible="true" 
+						                  labelLineLength="10.0"
+						                  legendSide="BOTTOM" 
+						                  legendVisible="true" 
+						                  minHeight="0.0" 
+						                  minWidth="0.0" 
+						                  VBox.vgrow="ALWAYS" />
+						    </children>
+						</VBox>
 
                         <VBox styleClass="recent-list-container" HBox.hgrow="ALWAYS">
                             <children>

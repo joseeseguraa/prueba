@@ -1,15 +1,1 @@
-[ {
-  "idAlerta" : "f1d43faf-d0ce-4aca-8bed-5207ed66fc02",
-  "tipo" : "Mensual",
-  "limite" : 5.0,
-  "categoria" : null,
-  "nombreCuenta" : "Piso Compartido",
-  "activa" : true
-}, {
-  "idAlerta" : "d795d337-1dd4-4754-812b-5580880b1685",
-  "tipo" : "Semanal",
-  "limite" : 10.0,
-  "categoria" : null,
-  "nombreCuenta" : "Mi Cuenta Personal",
-  "activa" : true
-} ]
+[ ]

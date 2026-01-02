@@ -3,10 +3,18 @@ package tds.gestiongastos.vista;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
+import javafx.scene.Cursor;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -17,6 +25,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 import tds.gestiongastos.main.Configuracion;
@@ -36,6 +45,7 @@ public class CuentaPersonalVistaControlador {
     @FXML private DatePicker dateHasta;
     @FXML private ComboBox<Categoria> comboCategoriasFiltro;
     @FXML private Label lblGastoTotal;
+    @FXML private PieChart graficoCategorias;
 
     private static final String SEPARADOR = "--------------------------------------------------";
 
@@ -106,15 +116,83 @@ public class CuentaPersonalVistaControlador {
             public Categoria fromString(String string) { return null; }
         });
     }
+    
+    private void actualizarGrafico() {
+        Map<String, Double> totalesPorCategoria = tablaGastos.getItems().stream()
+            .collect(Collectors.groupingBy(
+                g -> {
+                    String nombre = g.getCategoria().getNombre();
+                    int index = nombre.indexOf("_");
+                    return (index != -1) ? nombre.substring(index + 1) : nombre;
+                },
+                Collectors.summingDouble(Gasto::getCantidad)
+            ));
+
+        ObservableList<PieChart.Data> datosGrafico = FXCollections.observableArrayList();
+        totalesPorCategoria.forEach((nombre, total) -> {
+            datosGrafico.add(new PieChart.Data(nombre, total));
+        });
+
+        graficoCategorias.setAnimated(false); 
+        graficoCategorias.setLegendVisible(true);
+        graficoCategorias.setLegendSide(Side.BOTTOM);
+
+        graficoCategorias.setLabelsVisible(true); 
+
+        graficoCategorias.setLabelLineLength(10.0);
+        graficoCategorias.setStartAngle(90);
+        
+        graficoCategorias.setData(datosGrafico);
+
+        Platform.runLater(() -> {
+            double totalGlobal = datosGrafico.stream().mapToDouble(PieChart.Data::getPieValue).sum();
+
+            for (PieChart.Data data : graficoCategorias.getData()) {
+                if (data.getNode() != null) {
+
+                    double porcentaje = (data.getPieValue() / totalGlobal) * 100;
+                    String textoTooltip = String.format("%s\n%.2f €\n(%.1f%%)", 
+                                                        data.getName(), 
+                                                        data.getPieValue(), 
+                                                        porcentaje);
+                    
+                    Tooltip tt = new Tooltip(textoTooltip);
+                    tt.setStyle("-fx-font-size: 14px; -fx-background-color: #333; -fx-text-fill: white; -fx-font-weight: bold;");
+                    Tooltip.install(data.getNode(), tt);
+                    
+                    data.getNode().setOnMouseEntered(e -> {
+                        data.getNode().setOpacity(0.7); 
+                        data.getNode().setCursor(Cursor.HAND);
+                    });
+
+                    data.getNode().setOnMouseExited(e -> {
+                        data.getNode().setOpacity(1.0);
+                        data.getNode().setCursor(Cursor.DEFAULT);
+                    });
+                    
+                }
+            }
+            
+            graficoCategorias.setLabelsVisible(false);
+            graficoCategorias.setLabelsVisible(true);
+        });
+    }
+
 
     private void cargarDatosTabla(List<Gasto> datosFiltrados) {
         var cuenta = Configuracion.getInstancia().getGestionGastos().getCuentaActiva();
         var lista = (datosFiltrados != null) 
             ? FXCollections.observableArrayList(datosFiltrados) 
             : (cuenta != null ? FXCollections.observableArrayList(cuenta.getGastos()) : FXCollections.<Gasto>observableArrayList());
-            
+        
+        boolean hanCambiadoLosDatos = !lista.equals(tablaGastos.getItems());
+        
         tablaGastos.setItems(lista);
         actualizarEtiquetaTotal(lista);
+        if(hanCambiadoLosDatos) {
+        	System.out.println("Actualizamos Gráfica");
+        	actualizarGrafico();
+        }
     }
 
     private void actualizarEtiquetaTotal(List<Gasto> listaGastos) {
@@ -235,7 +313,7 @@ public class CuentaPersonalVistaControlador {
 
     @FXML public void botonGrafico(ActionEvent event) {
         System.out.println(">>> Acción: Ver Gráficas (Botón pulsado)");
-        mostrarAviso("Información", "Funcionalidad de gráficas en construcción.");
+        Configuracion.getInstancia().getSceneManager().showGrafico();        
         System.out.println(SEPARADOR);
     }
     
